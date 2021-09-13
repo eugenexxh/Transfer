@@ -48,6 +48,7 @@ void ExcelUtil::UpdateErrorCode(const QString& strPathExcel, const QString& strP
 		QString tmpFI = lineList[4].toString();
 		QString tmpJP = lineList[5].toString();
 
+		//表名error_code不能写错，表中的字段en,zh,de,fi,jp,code_id不能写错
 		sqlQuery.prepare("UPDATE error_code SET en=?,zh=?,de=?,fi=?,jp=? WHERE code_id=?");
 		sqlQuery.addBindValue(tmpEN);
 		sqlQuery.addBindValue(tmpZH);
@@ -65,6 +66,43 @@ void ExcelUtil::UpdateErrorCode(const QString& strPathExcel, const QString& strP
 	else
 	{
 		qDebug() << "updated errorDB error!";
+	}
+}
+
+void ExcelUtil::DeleteErrorCode(const QString& strPathExcel, const QString& strPathErrorCode)
+{
+	//1.读入Excel数据
+	QList<QList<QVariant>> varListList;
+	ReadFromExcel(strPathExcel, varListList);
+
+	//2.连接数据库
+	QSqlDatabase database = QSqlDatabase::addDatabase("QSQLITE");
+	QSqlQuery sqlQuery;
+	database.setDatabaseName(strPathErrorCode);
+	if (!database.open())
+	{
+		qDebug() << "Error: Failed to connect database." << database.lastError();
+		return;
+	}
+
+	int bflag = false;
+	int iRow = varListList.size();
+	for (int i = 1; i < iRow; ++i)
+	{
+		QList<QVariant> lineList = varListList[i];
+		int tmpId = lineList[0].toInt();
+
+		//表名error_code不能写错，表中的字段code_id不能写错
+		bflag = sqlQuery.exec(QString("DELETE FROM error_code WHERE code_id = %1").arg(tmpId));
+	}
+
+	if (bflag)
+	{
+		qDebug() << "delete data in errorDB success!";
+	}
+	else
+	{
+		qDebug() << "delete data in errorDB error!";
 	}
 }
 

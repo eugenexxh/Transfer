@@ -11,6 +11,8 @@ public:
 	//用指定的Excel表自动更新错误码
 	void UpdateErrorCode(const QString& strPathExcel, const QString& strPathErrorCode);
 
+	void DeleteErrorCode(const QString& strPathExcel, const QString& strPathErrorCode);
+
 	//将目录下所有Excel文件先整合，再分为普通表和矛盾表（两表路径需要生动输入）
 	void PreHandelExcel(const QString& strDir, const QString& strPathExcelGeneral, const QString& strPathExcelConflict);
 	//将普通表，分为安全表和风险表（两表路径自动生成）
