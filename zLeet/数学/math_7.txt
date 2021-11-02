@@ -1,0 +1,41 @@
+202. Happy Number                   //各位的平方相加。快乐数，各个序位上数字的平方和相加，照此规律一直得到1
+
+class Solution {                       //非快乐数里面肯定有4
+public:
+    bool isHappy(int n) {
+        while(n!=1 && n!=4)
+        {
+            int sum=0;			
+            while(n)                     //此处while循环的作用，将某个数各个序位上“数字的平方”和相加
+            {
+                sum += (n%10)*(n%10);
+                n /= 10;
+            }           
+            n = sum;
+        }
+        
+        return n==1;        
+    }
+};
+
+***************************************************************************************************************************
+
+258. Add Digits                          //各位相加
+
+class Solution {
+public:
+    int addDigits(int num) {
+        while(num/10 > 0)                    // num/10不能少，结果是两位数就继续循环下去
+        {
+            int sum = 0;			
+            while(num)                       //此处while循环的作用，将某个数各个序位上的“数字”相加
+            {
+                sum += num%10;
+                num /= 10;
+            }            
+            num = sum;
+        }
+        
+        return num;        
+    }
+};

@@ -1,0 +1,153 @@
+2. Add Two Numbers     //两个链表相加，从头到尾
+
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode* dummy=new ListNode(-1), *cur=dummy;      //创建新链表
+        int carry=0;
+		
+        while(l1 || l2)                                    //是或||，只要有一个节点没走到NULL，就能继续加下去
+        {
+            int n1 = l1 ? l1->val : 0;
+            int n2 = l2 ? l2->val : 0;
+            int sum = n1+n2+carry;                       
+            carry=sum/10;
+            int num=sum%10;
+            
+            cur->next = new ListNode(num);
+			
+            cur = cur->next;
+            l1 = l1 ? l1->next : NULL;
+            l2 = l2 ? l2->next : NULL;
+        }
+        
+        if(carry) cur->next = new ListNode(1);          //不能少
+        return dummy->next;
+    }
+};
+
+/*
+两数相加（十进制为例）：
+1. int  ssum = n1+n2+carry
+2. carry =um/10            //carry得提前声明好
+3. int num = sum%10
+*/
+
+************************************************************************************************************************
+
+67. Add Binary             //两个二进制字符串相加，顺序从后往前（大数相加的思想）
+
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        int p1=a.size()-1, p2=b.size()-1;        
+        int carry=0;
+        string res;
+		
+        while(p1>=0 || p2>=0)                    //从后往前加，只要有一个指针没走到最前端，就能继续加下去
+        {
+            int n1 = p1>=0 ? a[p1]-'0' : 0;
+            int n2 = p2>=0 ? b[p2]-'0' : 0;     //不要把b[]写成a[],浪费了30min
+            int sum = n1+n2+carry;                  //不要把p2写成p1，又白白浪费50min
+            carry=sum/2;
+            int num=sum%2;
+            
+            res = to_string(num)+res;          //新生的num在res前面，所以一定要拆开写
+			
+            --p1; --p2;                       //这两步不能少，否侧出不了循环
+        }
+        
+        if(carry==1) res = "1" + res;
+        return res;        
+    }
+};
+
+**************************************************************************************************************************
+
+66. Plus One                                //整型数字（放在vector中）加1运算，顺序从后往前
+
+class Solution {
+public:
+    vector<int> plusOne(vector<int>& digits) {
+        int i = digits.size()-1;
+        int carry=1;
+		
+        while(i >= 0)                  
+        {
+            int sum=digits[i]+carry;
+            carry=sum/10;
+            int num=sum%10;   
+			
+            digits[i]=num;
+            --i;
+            
+            if(carry < 1) break;              //重点carry是否大于1
+        }
+        
+        if(carry==1) digits.insert(digits.begin(), 1);
+        return digits;        
+    }
+};
+
+****************************************************************************************************************************
+
+43. 字符串相乘                                  //大数相乘
+
+class Solution {
+public:
+    string multiply(string num1, string num2) {
+        int n1=num1.size(), n2=num2.size();
+        vector<int> val(n1+n2);
+        string res;
+        
+        for(int i=n1-1; i>=0; --i)
+        {
+            for(int j=n2-1; j>=0; --j)
+            {
+                int p1=i+j, p2=i+j+1;
+                
+                int tmp=(num1[i]-'0')*(num2[j]-'0');                
+                int sum=tmp+val[p2];
+                val[p1] += sum/10;
+                val[p2] = sum%10;
+            }
+        }
+        
+        int pos=0;
+        while(pos<val.size() && val[pos]==0) ++pos;
+        
+        for(int i=pos; i<val.size(); ++i)
+        {
+            res=res+to_string(val[i]);
+        }
+        
+        return res.empty() ? "0" : res;
+    }
+};
+
+*******************************************************************************************************************
+
+7. Reverse Integer
+
+class Solution {
+public:
+    int reverse(int x) {
+        int base=0;
+		
+        while(x)
+        {
+            if(abs(base) > INT_MAX/10) return 0;     //防止溢出
+			
+            base = base*10 + x%10;          //核心
+			
+            x/=10;
+        }
+        
+        return base;        
+    }
+};
+
+
+
+
+

@@ -1,0 +1,42 @@
+28. Implement strStr()     //haystack字符串是否包含needle字符串，如果包含从哪个序位开始
+
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        if(needle.empty()) return 0;
+        int m=haystack.size(), n=needle.size();
+        if(m<n) return -1;
+        
+        for(int i=0; i<=m-n; ++i)     //每次遍历haystack新字符的时候都去重新遍历needle字符串
+        {
+            int j=0;			
+            for(j=0; j<n; ++j)
+            {
+                if(needle[j] != haystack[i+j]) break;      //haystack[i+j]很巧妙
+            }            
+            if(j==n) return i;
+        }
+        
+        return -1;
+    }
+};
+
+**********************************************************************************************************************************
+
+392. 判断子序列     
+//根据刷题习惯，改变了原题的参数顺序，将前者改为根字符串，后者改为子字符串
+//子序列，原序列删除一些元素但不改变剩余元素的相对位置
+
+class Solution {
+public:
+    bool isSubsequence(string str, string sub) {
+        int j=0;
+		
+        for(int i=0; i<str.size(); ++i)
+        {
+            if(str[i]==sub[j]) ++j;
+        }
+        
+        return j==s.size();        
+    }
+};

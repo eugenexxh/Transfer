@@ -1,0 +1,22 @@
+134. Gas Station                  //如果能够环路一周，返回出发时加油站的编号
+
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        int total=0, cur=0, start=0;
+		
+        for(int i=0; i<gas.size(); ++i)
+        {
+            total += gas[i]-cost[i];
+			
+            cur += gas[i]-cost[i];          //cur的作用是确定当前点是否是能作为出发点
+            if(cur < 0)
+            {
+                start=i+1;
+                cur=0;
+            }
+        }
+        
+        return total<0 ? -1 : start;        
+    }
+};

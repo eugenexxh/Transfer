@@ -1,0 +1,182 @@
+136. Single Number           //一个元素出现1次，其他元素均出现2次
+
+法一：哈希表（也可通过）
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        unordered_map<int, int> m;
+        for(auto a : nums) ++m[a];            //哈希表记录个数
+        int res = 0;
+		
+        for(auto it=m.begin(); it!=m.end(); ++it)
+        {
+            if(it->second==1) res = it->first;
+        }
+		
+        return res;
+    }
+};
+
+法二：位操作
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int res=0;
+        for(auto a : nums) res ^= a;
+        return res;
+    }
+};
+
+***********************************
+
+137. Single Number II             //一个元素出现1次，其他元素均出现3次
+
+法一：哈希表（也可通过）
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        unordered_map<int, int> m;
+        for(auto a : nums) ++m[a];
+		
+        int res = 0;
+        for(auto it=m.begin(); it!=m.end(); ++it)
+        {
+            if(it->second==1) res = it->first;
+        }
+		
+        return res;                
+    }
+};
+
+***************************************
+
+260. Single Number III             //两个元素出现1次，其他元素均出现2次
+
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+        vector<int> res;
+        unordered_map<int, int> m;
+        for(auto a : nums) ++m[a];
+		
+        for(auto it=m.begin(); it!=m.end(); ++it)
+        {
+            if(it->second == 1) res.push_back(it->first);
+        }
+        
+        return res;        
+    }
+};
+
+*******************************************************************************************************************************
+
+187. Repeated DNA Sequences                //一个字符串里，任意按顺序的10个可以为一个子串，找出不止出现一次的这种子串
+
+class Solution {
+public:
+    vector<string> findRepeatedDnaSequences(string s) {
+        set<string> sm, res;
+		
+        for(int i=0; i+9<s.size(); ++i)
+        {
+            string tmp = s.substr(i, 10);                  //此步很好
+			
+            if(sm.count(tmp)) res.insert(tmp);                //某个序列之前已经出现过了，将其放入返回的结果中
+            else sm.insert(tmp);
+        }
+        
+        return vector<string>{res.begin(), res.end()};        
+    }
+};
+
+**********************************************************************************************************************
+
+190. Reverse Bits                        //当时上海思科一位面试官现场出的考题
+
+class Solution {
+public:
+    uint32_t reverseBits(uint32_t n) {
+        uint32_t res=0;
+		
+        for(int i=32-1; i>=0; --i)
+        {
+            if(n&1 == 1) res = (res<<1)+1;       //要被返回的结果不断左移
+            else res = res<<1;
+            
+            n >>= 1;                            //原来的操作数不断右移
+        }
+        
+        return res;
+    }
+};
+
+********************************************************************************************************************
+
+191. Number of 1 Bits
+
+class Solution {
+public:
+    int hammingWeight(uint32_t n) {
+        int cnt = 0;
+		
+        for(int i=32-1; i>=0; --i)
+        {
+            cnt += (n&1);
+            n >>= 1;
+        }
+        
+        return cnt;        
+    }
+};
+
+************************************************************************************************************************
+
+201. Bitwise AND of Numbers Range          //规律：其实就是找找所有数（化成二进制）的左边公共部分，实际上操作m，n就行
+
+class Solution {
+public:
+    int rangeBitwiseAnd(int m, int n) {
+        int cnt=0;
+		
+        while(m!=n)                //m与n不断向右移动，直到它们相等，记录下移动次数
+        {
+            m >>= 1;
+            n >>= 1;
+            ++cnt;
+        }
+        
+        return (m<<cnt);        
+    }
+};
+
+****************************************************************************************************************************
+
+                                //判断一个数是否是2的幂次方
+231. Power of Two                  //规律：2的次方数最左边只有一个序位为1，其他都是0
+
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        int cnt=0;
+		
+        while(n>0)                 //实际，就是在统计1的个数
+        {
+            cnt += (n&1);
+            n >>= 1;
+        }
+        
+        return cnt==1;       
+    }
+};
+
+*********************************************
+
+
+/*
+如果n的最右边是1，那么 n&1 = 1;
+如果n的最右边是0，那么 n&1 = 0;
+*/
+
+

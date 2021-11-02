@@ -1,0 +1,35 @@
+19. Remove Nth Node From End of List           //删除倒数第n个节点
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+ 
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        if(!head) return NULL;
+        ListNode* slow=head, *fast=head;
+        for(int i=0; i<n; ++i) fast=fast->next;          //fast先走n
+        if(!fast) return head->next;
+		
+        while(fast->next)                               //然后slow, fast都走了m（总）-n步，（倒数来看，slow还有n步没走，即正好走到倒数第n步）
+        {            
+            fast=fast->next;
+			slow=slow->next;
+        }
+        slow->next = slow->next->next;
+        
+        return head;   
+    }
+};
+
+
+/*
+while(fast->next)    fast走到链表的最后一个节点
+while(fast)          fast走到NULL
+*/

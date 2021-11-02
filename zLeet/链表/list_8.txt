@@ -1,0 +1,31 @@
+143. Reorder List                //后半段倒序插入前半段
+
+class Solution {
+public:
+    void reorderList(ListNode* head) {
+        if(!head || !head->next || !head->next->next) return;
+        stack<ListNode*> st;
+        ListNode* cur=head;
+		
+        while(cur)
+        {
+            st.push(cur);
+            cur=cur->next;
+        }
+        
+        int n = ((int)st.size()-1)/2;              //控制出栈节点的个数
+        cur=head;
+		
+        while(n-- >0)
+        {
+            auto focus=st.top(); st.pop();
+            ListNode* tmp=cur->next;
+			
+			focus->next=tmp;
+            cur->next=focus;
+        
+            cur=tmp;
+        }
+        st.top()->next=NULL;        
+    }
+};

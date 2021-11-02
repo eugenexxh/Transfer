@@ -1,0 +1,19 @@
+58. Length of Last Word
+
+class Solution {
+public:
+    int lengthOfLastWord(string s) {
+        int i=s.size()-1, cnt=0;
+        while(i>=0 && s[i]==' ') --i;     //去除末尾的空格
+        
+        while(i>=0)
+        {
+            if(s[i]!=' ') ++cnt;
+            else break;
+            
+            --i;
+        }
+        
+        return cnt;       
+    }
+};

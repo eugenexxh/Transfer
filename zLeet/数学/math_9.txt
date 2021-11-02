@@ -1,0 +1,32 @@
+223. Rectangle Area 
+
+class Solution {
+public:
+    int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+	
+        int sum1 = (C-A)*(D-B), sum2 = (G-E)*(H-F), sum = 0;
+		
+        if(E>=C || A>=G || F>=D || B>=H) sum=sum1+sum2;
+        else sum = sum1-((min(G,C)-max(A,E))*(min(D,H)-max(B,F)))+sum2;   //“减”放在中间可避免溢出
+        
+        return sum;       
+    }
+};
+
+/*
+if()中
+考虑上下不接触有两种情况，交换上下位置就是另一种情况；
+考虑左右不接触有两种情况，交换左右位置就是另一种情况。
+*/
+
+/*
+min(G,C)     -   max(A,E)
+右边中的一个     左边中的一个
+
+min(D,H)     -   max(B,F)
+上边中的一个     下边中的一个
+
+减数小，被减数大
+*/
+
+*********************************

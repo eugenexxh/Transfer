@@ -1,0 +1,39 @@
+29. Divide Two Integers       
+
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+        long long diva = abs((long long)dividend), divb = abs((long long)divisor), res=0;      //res也是long long 
+        if(diva < divb) return 0;
+		
+        while(diva >= divb)                    //被除数 >= 除数（被除数的值会被改变，作为退出循环的条件）
+        {
+            long long cdivb=divb, cnt=1;
+			
+            while(diva >= (cdivb<<1))        //被除数 >= 2倍除数副本（副本除数的值会被改变，作为退出循环的条件）
+            {               
+                cnt <<= 1;
+				cdivb <<= 1;
+            }
+			
+            res += cnt;            
+            diva -= cdivb;                
+        }  
+		
+        if((dividend<0)^(divisor<0)) res = -res;
+        return res>INT_MAX ? INT_MAX : res;
+    }
+};
+
+
+/*
+使用long long的原因：
+eg: -2147483648 / -1 = 2147483648 超过int范围
+*/
+
+
+/*
+本质的算法：
+不断地将除数乘2（左移一位）；
+同时不断地将结果乘2（左移一位）；
+*/

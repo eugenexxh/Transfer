@@ -1,0 +1,125 @@
+21. Merge Two Sorted Lists
+
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        ListNode* dummy = new ListNode(-1), *cur=dummy;
+		
+        while(l1 && l2)             //两个链表相加(l1 || l2)，两个链表合并(l1 && l2)
+        {
+            if(l1->val < l2->val)
+            {
+                cur->next = l1;
+                l1 = l1->next;
+				cur = cur->next;
+            }
+            else
+            {
+                cur->next=l2;
+                l2=l2->next;
+				cur = cur->next;
+            }
+        }        
+        cur->next = l1 ? l1 : l2;
+		
+        return dummy->next;        
+    }
+};
+
+**********************************************************************************************************************
+
+23. Merge k Sorted Lists
+
+class Solution {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        if(lists.empty()) return NULL;
+        int n=lists.size();
+		
+        while(n>1)
+        {
+            int k=(n+1)/2;                                //(n+1)是为了当n为奇数时，k始终能从后半段开始
+            for(int i=0; i<n/2; ++i)
+            {
+                lists[i]=helper(lists[i], lists[i+k]);
+            }
+            n=k;
+        }
+        
+        return lists[0];        
+    }
+    
+    ListNode* helper(ListNode* l1, ListNode* l2)
+    {
+        ListNode* dummy=new ListNode(-1), *cur=dummy;
+		
+        while(l1 && l2)
+        {
+            if(l1->val < l2->val)
+            {
+                cur->next = l1;
+                l1=l1->next;
+				cur=cur->next;
+            }
+            else
+            {
+                cur->next=l2;
+                l2=l2->next;
+				cur=cur->next;
+            }
+        }
+        cur->next=l1 ? l1 : l2;
+        
+        return dummy->next;
+    }
+};
+
+********************************************************************************************************************************
+
+88. Merge Sorted Array                //从后向前看
+
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        int i=m-1, j=n-1, k=m+n-1;
+		
+        while(i>=0 && j>=0)                                       //合并用的是&&
+        {                                                             //最好这样写，出现了i>=0和j>=0，就不会发生越界
+            if(nums1[i] > nums2[j]) nums1[k--]=nums1[i--];
+            else nums1[k--]=nums2[j--];
+        }
+        
+        while(j>=0) nums1[k--]=nums2[j--];        
+    }
+};
+
+********************************************************************************************************************************
+
+2. Add Two Numbers     //两个链表相加，从头到尾
+
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode* dummy=new ListNode(-1), *cur=dummy;      //创建新链表
+        int carry=0;
+		
+        while(l1 || l2)                                    //是或||，只要有一个节点没走到NULL，就能继续加下去
+        {
+            int n1 = l1 ? l1->val : 0;
+            int n2 = l2 ? l2->val : 0;
+            int sum = n1+n2+carry;                       
+            carry=sum/10;
+            int num=sum%10;
+            
+            cur->next = new ListNode(num);
+			
+            cur = cur->next;
+            l1 = l1 ? l1->next : NULL;
+            l2 = l2 ? l2->next : NULL;
+        }
+        
+        if(carry) cur->next = new ListNode(1);          //不能少
+        return dummy->next;
+
+    }
+};

@@ -1,0 +1,45 @@
+206. Reverse Linked List
+
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        ListNode* p = NULL;
+        while(head)
+        {
+            ListNode* tmp = head->next;       //先标记好后面的
+            
+            head->next = p;                  //最核心的一步，改变节点指向
+            
+            p=head;
+            head=tmp;
+        }
+        
+        return p;        
+    }
+};
+
+***************************************************************************************************************************
+
+92. Reverse Linked List II
+
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        ListNode* dummy=new ListNode(-1), *pre=dummy;
+        dummy->next=head;
+        
+        for(int i=1; i<m; ++i) pre=pre->next;     //pre在需要反转范围边界的前一个
+        ListNode* cur=pre->next;
+		
+        for(int i=m; i<n; ++i)
+        {
+            ListNode* focus = cur->next;     
+			
+            cur->next = focus->next;         		
+            focus->next = pre->next;        
+            pre->next = focus;                       
+        }
+        
+        return dummy->next;       
+    }
+};

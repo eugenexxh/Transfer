@@ -1,0 +1,59 @@
+3. Longest Substring Without Repeating Characters      //找到一个没有重复元素的子串（子串即必须是连续的），这个子串最长
+
+class Solution {                                               
+public:
+    int lengthOfLongestSubstring(string s) {
+        unordered_map<char, int> m;
+        int left=-1, res=0;
+		
+        for(int i=0; i<s.size(); ++i)              
+        {
+            if(m.count(s[i]) && left<m[s[i]])     //如果哈希表里存在当前字符，并且其对应的序位 > 窗口左
+            {
+                left=m[s[i]];                     //将第一次出现的这个字符从窗口中删掉
+            }
+	
+            res=max(res, i-left);                //更新最长窗口的长度
+			
+			m[s[i]]=i;                           //将当前字符放入哈希表，key为字符，value为其对应序位
+        }
+        
+        return res;        
+    }
+};
+
+
+/*
+如果当前字符没有重复，则直接扩大右边界(“left不变”）；
+如果当前字符已经出现过并且在滑动窗口内，则先删掉第一次出现的字符(“left改变”)，再扩大边界；
+
+不要理会当前子串是不是最长的，反正通过res来记录最大长度，我们所要做的就是不管不顾继续往前走。
+*/
+
+可以学习leet_5，求出这个最长子串
+class Solution {                                               
+public:
+    string lengthOfLongestSubstring(string s) {
+        unordered_map<char, int> m;
+        int left=-1, len=INT_MIN;
+		string res;
+		
+        for(int i=0; i<s.size(); ++i)              
+        {
+            if(m.count(s[i]) && m[s[i]]>left)     
+            {
+                left=m[s[i]];                     
+            }
+			
+            if(len < i-left)
+			{
+			    len = i-left;
+				res = s.substr(left, len);
+			}
+
+			m[s[i]]=i;   
+        }
+        
+        return res;        
+    }
+}

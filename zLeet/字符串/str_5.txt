@@ -1,0 +1,81 @@
+10. Regular Expression Matching          //通配符匹配，本题采用递归法（用p匹配s）
+
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        if(p.empty()) return s.empty();       //递归的终止条件，千万不能少
+    
+        if(p.size()>1 && p[1]=='*')          //p.size()>1不能少
+        {
+            return isMatch(s, p.substr(2)) || (!s.empty() && (p[0]==s[0] || p[0]=='.') && isMatch(s.substr(1), p));
+        }
+        else
+        {
+            return !s.empty() && (s[0]==p[0] || p[0]=='.') && isMatch(s.substr(1), p.substr(1));
+        }          
+    }
+};
+
+
+//s.substr(idx, len);   s.substr(idx);   如果没有len，默认从idx一直复制到最后
+/*
+1. p[1]==*号：1.1. s[0]与p[0]不匹配，根据*号规则可以忽略p[0]与p[1]，比较s[0]与p[2];（s不动）
+              1.2. s[0]与p[0]相匹配，比较s[1]与p[0];（p不动）
+			  
+2. p[1]!=*号：2.1. s[0]与p[0]相匹配，比较s[1]与p[1];
+*/
+
+
+
+
+
+
+
+
+
+
+****************************************************************************************************************
+
+44. Wildcard Matching (hard)（舍）                  //两题*比较，leet_10的*依赖于*前的一个字符，表示该字符出现任意次数
+                                         //leet_44的*不依赖于前一个字符，可以匹配任意字符串
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        int i=0, j=0, ix=-1, jx=-1;
+        while(i<s.size())
+        {
+            if(p[j]==s[i] || p[j]=='?')    //如果相匹配，两个指针直接往后走
+            {
+                ++i; ++j;
+            }
+            else if(p[j]=='*')    //记如p[j]是*，记录*的位置：记录*在s中的位置，记录*在p中的位置并且p中的指针继续往后走一步
+            {
+                ix=i;
+                jx=j; ++j;
+            }
+            else if(ix>=0)     //如果不匹配但之前出现过*，istar往后走，i与istar保持同步；j永元在jstar后面一个位置
+            {
+                ++ix; i=ix;
+                j=jx+1;
+            }
+            else return false;    //如果不匹配且之前没出现过*，直接跪
+        }
+        
+        while(j<p.size() && p[j]=='*') ++j;
+        
+        return j==p.size();
+                
+    }
+};
+
+/*
+遍历s串的每个字符：
+1. s[i]与p[j]相匹配，指针i和j直接向后走
+2. s[i]与p[j]不匹配：
+   2.1. 如果p[j]此时是*号。s串中记录下此时的序位i，p串中记录下此时的序位j，指针j继续向后走一位（指向不是*的序位）；
+   2.2. 如果p[j]此时也不是*号，但幸好之前*号出现过。s串中istar向后走一位（指针i与istar同步），p串中指针j不动（始终指向*号的后一个序位）
+   2.3. 如果p[j]此时既不是*号，之前也没出现过*号，直接跪。
+*/
+
+
+

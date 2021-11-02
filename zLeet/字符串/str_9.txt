@@ -1,0 +1,87 @@
+20. Valid Parentheses
+
+class Solution {
+public:
+    bool isValid(string s) {
+        stack<char> st;
+		
+        for(int i=0; i<s.size(); ++i)      //遍历的元素是字符
+        {
+            if(s[i]=='(' || s[i]=='[' || s[i]=='{') st.push(s[i]);    //1. 遇到左括号，入栈的是元素本身
+            else                                       //2. 遇到右括号，分情况
+            {
+			    if(st.empty()) return false;           //2.1. 遇到右括号，栈为空
+				
+                char c=st.top(); st.pop();              //2.2. 遇到右括号，栈不为空，出栈比较
+                if(s[i]==')' && c!='(') return false;
+                if(s[i]==']' && c!='[') return false;
+                if(s[i]=='}' && c!='{') return false;                
+            }
+        } 
+		
+        return st.empty();                //返回st.empty()很巧妙
+    }
+};
+
+***************************************************************************************************************************
+
+32. Longest Valid Parentheses                //与之相似，搜集雨水题，11 42 84
+
+class Solution {
+public:
+    int longestValidParentheses(string s) {
+        stack<int> st;
+        int start=0, res=0;
+		
+        for(int i=0; i<s.size(); ++i)     
+        {
+            if(s[i]=='(') st.push(i);     //1. 遇到左括号，入栈，入栈的是序位
+            else
+            {                              //2. 遇到右括号，分情况
+                if(st.empty()) start=i+1;      //2.1. 遇到右括号，栈为空，重新赋值start（之前的子串不符要求）
+                else                           //2.2. 遇到右括好，栈不可为空，出栈计算
+                {
+                    st.pop();
+                    res = st.empty() ? max(res, i-start+1) : max(res, i-st.top());
+                }
+            }
+        }
+        
+        return res;
+    }
+};
+
+
+
+
+
+
+
+
+*************************************************************************************************************************
+
+22. Generate Parentheses        //tmp    //DFS
+
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> res;
+        string out;
+        helper(n, n, out, res);
+        
+        return res;        
+    }
+    
+    void helper(int left, int right, string out, vector<string>& res)
+    {
+        if(left > right) return;         //递归终止条件
+		
+        if(left==0 && right==0) res.push_back(out);
+        else
+        {
+            if(left > 0) helper(left-1, right, out+'(', res);
+            if(right > 0) helper(left, right-1, out+')', res);
+        }
+    }
+};
+

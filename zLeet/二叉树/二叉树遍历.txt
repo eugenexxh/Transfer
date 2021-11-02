@@ -1,0 +1,115 @@
+94. 二叉树的中序遍历
+
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode *root) 
+	{
+        vector<int> res;
+        helper(root, res);
+        return res;
+    }
+	
+    void helper(TreeNode *root, vector<int> &res) 
+	{
+        if (!root) return;
+		
+        if (root->left) helper(root->left, res);
+        res.push_back(root->val);
+        if (root->right) helper(root->right, res);
+    }
+};
+
+*******************************************************************************************************************************************
+
+144. 二叉树的前序遍历
+
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode *root) 
+	{
+        vector<int> res;
+        helper(root, res);
+        return res;
+    }
+	
+    void helper(TreeNode *root, vector<int> &res) 
+	{
+        if (!root) return;
+		
+		res.push_back(root->val);
+        if (root->left) helper(root->left, res);        
+        if (root->right) helper(root->right, res);
+    }
+};
+
+*******************************************************************************************************************************************
+
+145. 二叉树的后序遍历
+
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode *root) 
+	{
+        vector<int> res;
+        helper(root, res);
+        return res;
+    }
+	
+    void helper(TreeNode *root, vector<int> &res) 
+	{
+        if (!root) return;
+	
+        if (root->left) helper(root->left, res);        
+        if (root->right) helper(root->right, res);
+		res.push_back(root->val);
+    }
+};
+
+*******************************************************************************************************************************************
+
+102. 二叉树的层次遍历
+
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) 
+	{
+        vector<vector<int>> res;
+        helper(root, 0, res);
+        return res;
+    }
+	
+    void helper(TreeNode* node, int level, vector<vector<int>>& res) {
+        if (!node) return;
+        if (res.size() == level) res.push_back({});
+		
+        res[level].push_back(node->val);
+        if (node->left) helper(node->left, level + 1, res);
+        if (node->right) helper(node->right, level + 1, res);
+    }
+};
+
+****************************************************************
+
+107. 二叉树的层次遍历 II
+
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) 
+	{
+        vector<vector<int>> res;
+        helper(root, 0, res);
+        return vector<vector<int>> (res.rbegin(), res.rend());                //注意一下反向迭代器
+    }
+	
+    void helper(TreeNode* node, int level, vector<vector<int>>& res) {
+        if (!node) return;
+        if (res.size() == level) res.push_back({});
+		
+        res[level].push_back(node->val);
+        if (node->left) helper(node->left, level + 1, res);
+        if (node->right) helper(node->right, level + 1, res);
+    }
+};
+
+
+

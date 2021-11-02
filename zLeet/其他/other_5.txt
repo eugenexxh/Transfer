@@ -1,0 +1,39 @@
+155. Min Stack                     //帮助栈s2的栈顶用来存放目前为止的最小元素
+
+class MinStack {
+public:
+    /** initialize your data structure here. */
+    MinStack() {
+        
+    }
+    
+    void push(int x) {                                 //push时注意是否要将push的元素push到辅助栈s2中
+        s1.push(x);
+        if(s2.empty() || x<=s2.top()) s2.push(x);        
+    }
+    
+    void pop() {                                       //pop时注意是否要将pop的元素从辅助栈s2中pop出去
+        if(s1.top()==s2.top()) s2.pop();
+        s1.pop();        
+    }
+    
+    int top() {
+        return s1.top();        
+    }
+    
+    int getMin() {
+        return s2.top();        
+    }
+    
+private:
+    stack<int> s1, s2;   
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack* obj = new MinStack();
+ * obj->push(x);
+ * obj->pop();
+ * int param_3 = obj->top();
+ * int param_4 = obj->getMin();
+ */

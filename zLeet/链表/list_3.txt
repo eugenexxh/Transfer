@@ -1,0 +1,35 @@
+24. Swap Nodes in Pairs                   //两两交换相邻节点
+
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+        if(!head) return NULL;
+        ListNode* dummy=new ListNode(-1), *cur=dummy;
+        dummy->next=head;
+        
+        while(cur->next && cur->next->next)
+        {
+            ListNode* focus=cur->next->next;      
+            
+            cur->next->next=focus->next;     
+            focus->next=cur->next;           
+            cur->next=focus;                 
+            
+            cur=focus->next;           
+        }
+        
+        return dummy->next;        
+    }
+};
+
+
+/*
+cur    cur->next   cur->next->next(t)       t->next
+dummy     1              2                   3               4    .......
+
+最想做一步是动节点2，让“2 -> 1"，但如果直接这样做的化2后面的3会全部丢失掉
+所以先让某个节点和2后面的3相连
+*/
+
+要改变节点指向时，一定要先处理好后面的关系，再去改指向
+跟先插入后断开是一个意思

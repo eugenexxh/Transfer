@@ -1,0 +1,122 @@
+204. Count Primes
+
+法一：AC率_19/20
+
+class Solution {
+public:
+    int countPrimes(int n) 
+    { 
+        int cnt=0;
+        for(int i=2; i<n;++i)
+        {
+            if(helper(i)) ++cnt;
+        }
+        
+        return cnt;              
+    }
+    
+    bool helper(int n)
+    {
+        if(n<=3) return n>1;
+        
+        int k=sqrt(n);
+        for(int i=2; i<=k; ++i)
+        {
+            if(n%i==0) return false;
+        }
+        
+        return true;
+    }
+};
+
+**********************************************************************************
+法二；
+class Solution {
+public:
+    int countPrimes(int n) {                    //判断 0~n-1 中有几个质数
+        vector<bool> prime(n, true);
+        int cnt=0;
+		
+        for(int i=2; i<n; ++i)                  //从序位2（此处代表真正的数字2）开始，因为0和1肯定不是真正的质数，直接忽略      
+        {
+            if(prime[i])
+            {
+                ++cnt;
+				
+                for(int j=2; i*j<n; ++j)        //将prime[i]的倍数（2倍，3倍....）都标记为false，既然是倍数，肯定不是质数了     
+                {
+                    prime[i*j]=false;
+                }
+            }
+        }
+        
+        return cnt;        
+    }
+};
+
+
+
+*******************************************************************************************************************************
+
+263. Ugly Number                       //判断一个数是否为丑数，丑数是只包含质因数2，3，5的整数
+
+class Solution {
+public:
+    bool isUgly(int num) {                
+        while(num >= 2)                      // num >= 2 不可少
+        {
+            if(num%2==0) num/=2;
+            else if(num%3==0) num/=3;
+            else if(num%5==0) num/=5;
+            else return false;
+        }
+        
+        return num==1;       
+    }
+};
+
+******************************************************************************************************************************
+
+264. Ugly Number II                //找出第n个丑数
+
+class Solution {
+public:
+    int nthUglyNumber(int n) {
+        vector<int> res(1, 1);             //此vetor用来存放丑数,里面不要写具体的0，1，2，3序位，全部用i2,i3,i5表示
+        int i2=0, i3=0, i5=0;
+		
+        while(res.size()<n)
+        {
+            int m2=res[i2]*2, m3=res[i3]*3, m5=res[i5]*5;
+            int m = min(m2, min(m3, m5));
+            res.push_back(m);
+            
+            if(m==m2) ++i2;
+            if(m==m3) ++i3;
+            if(m==m5) ++i5;
+        }
+        
+        return res.back();        
+    }
+};
+
+***************************************************************************************************************************
+
+279. Perfect Squares                  //一个数，最少由几个完全平方数构成。根据数学经验返回的结果只有4种可能性“1，2”，3，4
+
+class Solution {
+public:
+    int numSquares(int n) {
+        while(n%4==0) n/=4;           //缩小数字
+        
+        if(n%8 == 7) return 4;        //根据数学经验
+        
+        for(int a=0; a*a<=n; ++a)      //返回1或2，此步最重要
+        {
+            int b=sqrt(n-a*a);
+            if(a*a + b*b == n) return !!a + !!b;
+        }
+        
+        return 3;        
+    }
+};

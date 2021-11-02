@@ -1,0 +1,62 @@
+112. 路径总和
+
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int sum) 
+	{
+        if (!root) return false;
+        if (!root->left && !root->right && root->val == sum ) return true;
+		
+        return hasPathSum(root->left, sum - root->val) || hasPathSum(root->right, sum - root->val);
+    }
+};
+
+****************************************************************************************************************************************
+
+113. 路径总和 II
+
+class Solution {
+public:
+    vector<vector<int> > pathSum(TreeNode *root, int sum) 
+	{
+        vector<vector<int>> res;
+        vector<int> out;
+        helper(root, sum, out, res);
+        return res;
+    }
+    void helper(TreeNode* node, int sum, vector<int>& out, vector<vector<int>>& res) 
+	{
+        if (!node) return;
+        out.push_back(node->val);
+        if (sum == node->val && !node->left && !node->right) 
+		{
+            res.push_back(out);
+        }
+		
+        helper(node->left, sum - node->val, out, res);
+        helper(node->right, sum - node->val, out, res);
+		
+        out.pop_back();
+    }
+};
+
+****************************************************************************************************************************************
+
+257. 二叉树的所有路径
+
+class Solution {
+public:
+    vector<string> binaryTreePaths(TreeNode* root) 
+	{
+        vector<string> res;
+        if (root) helper(root, "", res);
+        return res;
+    }
+	
+    void helper(TreeNode* node, string out, vector<string>& res) 
+	{
+        if (!node->left && !node->right) res.push_back(out + to_string(node->val));
+        if (node->left) helper(node->left, out + to_string(node->val) + "->", res);
+        if (node->right) helper(node->right, out + to_string(node->val) + "->", res);
+    }
+};

@@ -1,0 +1,94 @@
+36. Valid Sudoku               //每行每列是否有重复数字，每个小矩阵是否有重复数字
+
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        int m=board.size(), n=board[0].size();
+		
+        for(int i=0; i<m; ++i)            //遍历，查看当前位置所在的行和列以及小矩阵中是否已经出现该数字
+        {
+            for(int j=0; j<n; ++j)
+            {
+                if(board[i][j] >= '1' && board[i][j] <= '9')    //不能少
+                {
+                    bool flag = helper(board, i, j);
+                    if(flag==false) return false;                    
+                }
+            }
+        }
+        
+        return true;
+    }
+    
+	
+    bool helper(vector<vector<char>>& board, int i, int j)
+    {
+        for(int col=0; col<9; ++col)           //查看当前位置(i, j)的行是否出现过该数字，遍历的是列（十字架的一横）
+        {
+            if(col!=j && board[i][j]==board[i][col]) return false;
+        }
+        
+        for(int row=0; row<9; ++row)         //查看当前位置(i, j)的列是否出现过该数字，遍历的是行（十字架的一竖）
+        {
+            if(row!=i && board[i][j]==board[row][j]) return false;
+        }
+        
+        for(int row=i/3*3; row<i/3*3+3; ++row)    //查看当前位置所处的 3x3 小矩阵
+        {
+            for(int col=j/3*3; col<j/3*3+3; ++col)
+            {
+                if((row!=i || col!=j) && board[i][j]==board[row][col]) return false;
+            }
+        }
+        
+        return true;
+    }
+};
+
+***************************************************************************************************************************
+
+37. Sudoku Solver
+
+class Solution {
+public:
+    void solveSudoku(vector<vector<char>>& board) 
+	{
+        helper(board, 0, 0);
+    }
+    
+    bool helper(vector<vector<char>>& board, int i, int j)
+	{
+        if (i == 9) return true;
+        if (j >= 9) return helper(board, i + 1, 0);
+        if (board[i][j] != '.') return helper(board, i, j + 1);
+		
+        for (char c = '1'; c <= '9'; ++c) {
+            if (!isValid(board, i , j, c)) continue;
+            board[i][j] = c;
+			
+            if (helper(board, i, j + 1)) return true;
+            board[i][j] = '.';
+        }
+		
+        return false;
+    }
+    
+    bool isValid(vector<vector<char>>& board, int i, int j, char val)
+	{
+        for (int col = 0; col < 9; ++col) {
+            if (col!=j && board[i][col] == val) return false;
+        }
+        
+        for (int row = 0; row < 9; ++row) {
+            if (row!=i && board[row][j] == val) return false;
+        }
+        
+        for (int row = i/3*3; row < i/3*3+3; ++row) {
+            for (int col = j/3*3; col < j/3*3+3; ++col) {
+                if ((row!=i || col!=j) && board[row][col] == val) return false;
+            }
+        }
+        
+        return true;
+    }
+};

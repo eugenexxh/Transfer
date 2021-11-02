@@ -1,0 +1,40 @@
+138. Copy List with Random Pointer         //拷贝带有随机指针的链表
+
+class Solution {
+public:
+    Node *copyRandomList(Node *head) {
+        if(!head) return NULL;
+        Node* cur=head;          //第1步，在原链表的每个节点后拷贝出一个新节点
+        while(cur)
+        {
+            Node* tmp=new Node(cur->val, nullptr, nullptr);
+			
+            tmp->next=cur->next;
+            cur->next=tmp;
+			
+            cur=tmp->next;
+        }
+        
+        cur=head;                 //第2步，依次给新链表的随机指针赋值
+        while(cur)
+        {
+            if(cur->random) cur->next->random=cur->random->next;
+             
+            cur=cur->next->next;
+        }
+        
+        cur=head;                         //第3步，断开链表
+        Node* newHead=head->next;
+        while(cur)
+        {
+            Node* tmp=cur->next;
+			
+            cur->next=tmp->next;                             //先断原来的改变原始链表的指向
+            if(tmp->next) tmp->next=tmp->next->next;         //再断拷贝的,if(tmp->next),因为tmp此时可能到达末尾了
+			
+            cur=cur->next;
+        }
+        
+        return newHead;        
+    }
+};

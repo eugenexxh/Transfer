@@ -1,0 +1,60 @@
+168. Excel Sheet Column Title    //10进制转为26进制（10进制转为2进制）
+
+class Solution {
+public:
+    string convertToTitle(int n) {
+        string res;
+		
+        while(n)
+        {
+            res += (--n%26 + 'A');
+            n /= 26;
+        }
+        reverse(res.begin(), res.end());
+		
+        return res;        
+    }
+};
+
+**********************************
+
+171. Excel Sheet Column Number    //26进制转为10进制（2进制转为10进制）
+
+class Solution {
+public:
+    int titleToNumber(string s) {
+        int res=0, base=1, n=s.size();
+        
+        for(int i=n-1; i>=0; --i)
+        {
+            res += (s[i]-'A'+1)*base;
+            base *= 26;                                         //溢出，998 / 1000 test cases passed.
+        }
+        
+        return res;        
+    }
+};
+
+//测试案例没有全过的原因是最后的例子数值太大，得把int改为long long
+
+***************************************
+
+z_1.（10进制转为2进制）
+
+while(n)
+{
+	res += (n%2 ==0) ? '0' : '1'              //正真需要的是余数，所以是取余操作
+	n /= 2;
+}
+reverse(res.begin(), res.end());
+
+**************************************
+
+z_2.（2进制转为10进制）
+
+int res = 0, base = 1;
+for(int i=s.size()-1; i>=0; --i)
+{
+    res += s[i]*base;
+    base *= 2;                                         
+}

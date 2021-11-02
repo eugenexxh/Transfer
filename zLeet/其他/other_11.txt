@@ -1,0 +1,23 @@
+251. Flatten 2D Vector
+
+class Vector2D {
+public:
+    Vector2D(vector<vector<int>>& vec2d) {                //最重要的一步，插入操作，插入的是向量元素vector
+	    for(auto a : vec2d)                               //a本身就是一个向量元素vector
+		{
+		    v.insert(v.end(), a.begin(), a.end());
+		}
+    }
+	
+    int next() {
+	    return v[i++];
+    }
+	
+    bool hasNext() {
+	    return i<v.size();       
+    }
+	
+private:
+    vector<int> v;
+    int i = 0;
+};

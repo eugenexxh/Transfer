@@ -1,0 +1,69 @@
+13. Roman to Integer
+                                              //eg: 742
+class Solution {                             //     DCC XL II         罗马数字序位规则：big_small -> 两者相加
+public:
+    int romanToInt(string s) {
+        int res=0;                     
+        unordered_map<char, int> m{{'I', 1}, {'V', 5}, {'X', 10}, {'L', 50}, {'C', 100}, {'D', 500}, {'M', 1000}};
+		
+        for(int i=0; i<s.size(); ++i)     
+        {
+            int val = m[s[i]];   
+			
+            if(i==s.size()-1 || m[s[i+1]]<=val) res += val;    
+            else res -= val;                                                 
+        }
+        
+        return res;        
+    }
+};
+
+
+******************************************************************************************************************************
+
+
+12. Integer to Roman
+
+class Solution {
+public:
+    string intToRoman(int num) {
+        vector<int> value{1000, 500, 100, 50,  10,   5,   1};              
+        vector<char> roman{'M', 'D', 'C', 'L', 'X', 'V', 'I'};
+        
+        string res;
+                
+        for(int i=0; i<7; i+=2)          //遍历的其实是vector<int>
+        {
+            int x=num/value[i];
+			
+            if(x>0 && x<4)                  
+            {
+                for(int k=1; k<=x; ++k) res = res + roman[i];
+            }
+            else if(x==4)
+			{
+			    res = res + roman[i] + roman[i-1];
+			}
+            else if(x>4 && x<9)
+            {
+                res = res + roman[i-1];
+                for(int k=6; k<=x; ++k) res = res + roman[i];
+            }
+            else if(x==9)
+			{
+			    res = res + roman[i] + roman[i-2];
+			}
+            
+            num %= value[i];      //不能少
+        }
+        
+        return res;           
+    }
+};
+
+
+//要使用+=，右边最好只有一个操作数
+
+
+
+

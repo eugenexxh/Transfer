@@ -1,0 +1,153 @@
+5. Longest Palindromic Substring          //找一个回文子串，这个子串最长，例"noon"
+
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        string res;
+        int len=INT_MIN;
+		
+        for(int i=0; i<s.size(); ++i)      //遍历字符串，从当前位置向两侧找回文串，并记录下此次回文串的长度
+        {
+            int left=i, right=i;           
+			
+            while(right+1<s.size() && s[right+1]==s[right]) ++right;                //1. 预处理，跳过重复项
+            
+            while(left-1>=0 && right+1<s.size() && s[left-1]==s[right+1])      //2. 正式开始向两边扩
+            {
+                --left; ++right;
+            }
+            
+            if(len < right-left+1)                                          //3. 计算本次回文子串的长度，并比较                               
+            {
+                len=right-left+1;
+                res=s.substr(left, len);
+            }
+        }
+        
+        return res;       
+    }
+};
+
+********************************************************************************************************************************
+
+9. Palindrome Number          //判断一个整型数字是否是回文数字用翻转（不是字符串，不能直接用双指针进行首尾对比验证，对比题125）
+
+class Solution {
+public:
+    bool isPalindrome(int x) 
+	{
+        if(x<0 || (x%10==0 && x!=0)) return false;        //小于0的数和末尾是0的数肯定不是回文数
+		
+        return x==helper(x);                         
+    }
+    
+    int helper(int x)                                    //辅助函数，将一个整型数字反转
+    {
+        int base=0;
+        while(x)
+        {
+            if(abs(base) > INT_MAX/10)  return 0;     //重要，防止溢出
+            
+            base = base*10 + x%10;
+			
+            x /= 10;
+        }
+        return base;
+    }
+};
+
+/*
+-2^31 ~ 2^31-1;
+-21,4748,3648 ~ 21,4748,3647
+*/
+
+********************************************************************************************************************************
+
+7. Reverse Integer     //与题9相关
+
+class Solution {
+public:
+    int reverse(int x) {
+        int base=0;
+		
+        while(x)
+        {
+            if(abs(base)>INT_MAX/10) return 0;    //防止溢出
+            
+            base = base*10 + x%10;
+			
+            x /= 10;
+        }
+        
+        return base;
+    }
+};
+
+
+******************************************************************************************************************************
+
+125. Valid Palindrome         //验证一个字符串是否是回文字符串（因为是字符串，所以预处理之后可以进行首尾对比验证，对比题9）
+
+class Solution {
+public:
+    bool isPalindrome(string s) 
+	{
+        string res;
+        for(int i=0; i<s.size(); ++i)                //1. 预处理，重新造一个字符串。遍历，将大写字母化为小写字母，去除空格等无用字符
+        {
+            if(s[i]>='A' && s[i]<='Z')
+            {
+                res += (s[i]+32);
+            }
+            else if((s[i]>='a' && s[i]<='z') || (s[i]>='0' && s[i]<='9'))
+            {
+                res += s[i];
+            }
+        }
+        
+        int left=0, right=res.size()-1;             //2. 双指针，进行首尾对比验证
+        while(left < right)
+        {
+            if(res[left] != res[right]) return false;
+            ++left; --right;
+        }
+        
+        return true;        
+    }    
+};
+
+***********************************************************************************************************************
+
+234. Palindrome Linked List      //判断一个链表是否为回文链表，栈
+
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        if(!head) return true;       //不能少
+        stack<int> st;
+        ListNode* slow=head, *fast=head;
+        st.push(head->val);
+                                                         //1. slow先走一半，并且走过的节点的val都存到stack中
+        while(fast && fast->next && fast->next->next)         //如果个数为奇数，fast能走到末尾，slow走到正中间
+        {                                                         //如果个数为偶数, fast走到倒数第二，slow走到前一半的最后一个
+            fast=fast->next->next;           
+            slow=slow->next;
+            st.push(slow->val);            
+        }
+        if(fast->next==NULL) st.pop();    //处理奇数情况，也就是fast走到末尾，slow走到正中间
+        
+        while(slow && slow->next)          //2. slow走完接下来的一半    
+        {                                        //slow会走到最后一个节点，不会走到NULL
+            slow=slow->next;
+            int tmp=st.top(); st.pop();
+            if(tmp != slow->val) return false;
+        }
+        
+        return true;        
+    }
+};
+
+/*
+1. fast走到末尾，slow走到中间（slow经过的节点全部入栈）；
+2. slow每走一步就与出栈的数进行比较；
+*/

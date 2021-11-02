@@ -1,0 +1,127 @@
+322. 零钱兑换
+
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        vector<int> dp(amount+1, INT_MAX);
+        dp[0]=0;
+        
+        for(int i=1; i<=amount; ++i)
+        {
+            for(int j=0; j<coins.size(); ++j)
+            {
+                if(i>=coins[j] && dp[i-coins[j]]!=INT_MAX)
+                {
+                   dp[i]=min(dp[i], dp[i-coins[j]]+1); 
+                }
+            }
+        }
+        
+        return (dp[amount]==INT_MAX) ? -1 : dp[amount];        
+    }
+};
+
+//最大最小型
+//dp[i]： 拼凑成i元所需要的最少硬币个数
+
+****************************************************************************************************************
+
+45. 跳跃游戏 II
+
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int n=nums.size();
+        vector<int> dp(n, INT_MAX);
+        dp[0]=0;
+        
+        for(int i=1; i<n; ++i)
+        {
+            for(int j=0; j<=i; ++j)
+            {
+                if(j+nums[j]>=i && dp[j]!=INT_MAX)
+                {
+                    dp[i]=min(dp[i], dp[j]+1);
+                }
+            }
+        }
+        
+        return dp[n-1];        
+    }
+};
+
+//极值型
+//dp[i]: 跳到i位置所需要的最小步数
+//leet_AC: 90/92
+
+******************************************************************************************************************
+
+64. 最小路径和
+
+class Solution {
+public:
+    int minPathSum(vector<vector<int>>& grid) {
+        int m=grid.size(), n=grid[0].size();
+        
+        vector<vector<int>> dp(m, vector<int>(n));
+        dp[0][0]=grid[0][0];
+        for(int i=1; i<m; ++i) dp[i][0] = grid[i][0] + dp[i-1][0];
+        for(int j=1; j<n; ++j) dp[0][j] = grid[0][j] + dp[0][j-1];
+        
+        for(int i=1; i<m; ++i)
+        {
+            for(int j=1; j<n; ++j)
+            {
+                dp[i][j] = grid[i][j] + min(dp[i-1][j], dp[i][j-1]);
+            }
+        }
+        
+        return dp[m-1][n-1];        
+    }
+};
+
+//极值型
+//dp[i][j]: 到达(i, j)位置的最短路径和
+
+********************************************************************************************************************
+
+174. 地下城游戏
+
+class Solution {
+public:
+    int calculateMinimumHP(vector<vector<int>>& dungeon) {
+        int m=dungeon.size(), n=dungeon[0].size();
+        
+        vector<vector<int>> dp(m+1, vector<int>(n+1, INT_MAX));
+        dp[m][n - 1] = 1; dp[m - 1][n] = 1;
+        
+        for (int i = m - 1; i >= 0; --i) {
+            for (int j = n - 1; j >= 0; --j) {
+                dp[i][j] = max(1, min(dp[i + 1][j], dp[i][j + 1]) - dungeon[i][j]);
+            }
+        }
+        
+        return dp[0][0];        
+    }
+};
+
+//极值型
+//dp[i][j]: 到达(i, j)位置所需要的最低健康点数
+
+********************************************************************************************************************
+
+120. 三角形最小路径和
+
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+        vector<int> dp(triangle.back());
+		
+        for (int i = (int)triangle.size() - 2; i >= 0; --i) {
+            for (int j = 0; j <= i; ++j) {
+                dp[j] = min(dp[j], dp[j + 1]) + triangle[i][j];
+            }
+        }
+        return dp[0];
+    }
+};

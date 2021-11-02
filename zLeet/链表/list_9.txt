@@ -1,0 +1,78 @@
+147. Insertion Sort List                //链表插入排序
+
+class Solution {
+public:
+    ListNode* insertionSortList(ListNode* head) {
+        ListNode* dummy=new ListNode(-1), *cur=dummy;
+		
+        while(head)                                         //这里的head才是focus啊（想象一部分已经排好序了）
+        {
+            ListNode* tmp=head->next;                     
+			
+            cur=dummy;                                        //cur每次重新回到最前端
+            while(cur->next && cur->next->val<=head->val)       //0--cur都是排好序的，并且都是 <= head的
+            {
+                cur=cur->next;
+            }
+            
+            head->next=cur->next;                 
+            cur->next=head;	                         		
+        
+            head=tmp;
+        }
+        
+        return dummy->next;        
+    }
+};
+
+/*
+         cur   cur->next  head   tmp
+1    2    3  。     6        5    X        //将5放在3和6之间
+*/
+
+*****************************************
+
+148. Sort List          //链表归并排序
+
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        if(!head || !head->next) return head;     //不能少，递归终止的条件
+        ListNode* slow=head, *fast=head, *pre=head;
+		
+        while(fast && fast->next)
+        {
+		    pre=slow;
+			slow=slow->next;
+		    fast=fast->next->next;            
+        }
+		
+        pre->next=NULL;
+        return merge(sortList(head), sortList(slow));
+
+    }
+    
+    ListNode* merge(ListNode* l1, ListNode* l2)
+    {
+        ListNode* dummy=new ListNode(-1), *cur=dummy;
+        while(l1 && l2)
+        {
+            if(l1->val < l2->val)
+            {
+                cur->next=l1;
+                l1=l1->next;
+				cur=cur->next;
+            }
+            else
+            {
+                cur->next=l2;
+                l2=l2->next;
+				cur=cur->next;
+            }            
+        }        
+        cur->next = l1? l1 : l2;
+		
+        return dummy->next;
+    }
+};
+

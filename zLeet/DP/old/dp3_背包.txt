@@ -1,0 +1,112 @@
+背包问题  lint_92
+
+int backPack(int m, vector<int> &A)
+{
+	vector<int> dp(m + 1, 0);
+	dp[0] = 0;
+
+	for (int j = 0; j < A.size(); ++j)
+	{
+		for (int i = m; i>0; --i)
+		{
+			if (i >= A[j])
+			{
+				dp[i] = max(dp[i], dp[i - A[j]] + A[j]);
+			}
+		}
+	}
+
+	return dp[m];
+}
+
+dp[i]: 背包大小为m时最多能装的质量
+
+********************************************************************************************************************************
+
+背包问题II  lint_125
+
+int backPack(int m, vector<int> &A)
+{
+	vector<int> dp(m + 1, 0);
+	dp[0] = 0;
+
+	for (int j = 0; j < A.size(); ++j)
+	{
+		for (int i = m; i>0; --i)
+		{
+			if (i >= A[j])
+			{
+				dp[i] = max(dp[i], dp[i - A[j]] + V[j]);
+			}
+		}
+	}
+
+	return dp[m];
+}
+
+***************************************************************************************************************************
+
+换硬币  lint_669/leet_322 (不是0-1背包）
+
+int coinChange(vector<int>& coins, int amount)
+{
+	vector<int> dp(amount+1, INT_MAX);
+	dp[0]=0;
+	
+	for(int i=1; i<=amount; ++i)
+	{
+		for(int j=0; j<coins.size(); ++j)
+		{
+			if(i>=coins[j] && dp[i-coins[j]]!=INT_MAX)
+			{
+			   dp[i]=min(dp[i], dp[i-coins[j]]+1); 
+			}
+		}
+	}
+	
+	return (dp[amount]==INT_MAX) ? -1 : dp[amount];        
+}
+
+***************************************************************************************************************************
+
+实战：
+#include <iostream>
+#include <algorithm>                    
+#include <functional>                   
+#include <vector>
+using namespace std;
+
+int helper(vector<int>& p, vector<int>& w, int N, int W)
+{
+	p.insert(p.begin(), 0);
+	w.insert(w.begin(), 0);	
+	vector<vector<int>> dp(N+1, vector<int>(W+1, 0));
+	
+	for (int i = 1; i <= N; ++i)
+	{
+		for (int j = 0; j <= W; ++j)
+		{
+			if(j<w[i]) dp[i][j] = dp[i - 1][j];			
+			else dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - w[i]] + p[i]);			
+		}
+	}
+
+	return dp.back().back();
+}
+
+int main()
+{
+	vector<int> p{ 6, 3, 5, 4, 6 };
+	vector<int> w{ 2, 2, 6, 5, 4 };
+	int N = 5, W = 10;
+	int res = helper(p, w, N, W);
+	cout << res << endl;
+	
+	system("pause");
+	return 0;
+}
+
+
+
+
+

@@ -1,0 +1,89 @@
+49. Group Anagrams      //异位单词组（好多个异位单词）。异位单词：组成的字母相同，只是序位不同
+
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string, vector<string>> m;
+        vector<vector<string>> res;           //vector不初始化也可以
+        
+        for(auto a : strs)      //1. 遍历的字符串组，放入哈希表，key为排序后的字符串，value为原始的字符串组
+        {
+            string t=a;
+            sort(t.begin(), t.end());
+            
+            m[t].push_back(a);
+        }
+        
+        for(auto p : m)     //2. 遍历哈希表，装入它的value到vector中
+        {
+            res.push_back(p.second);
+        }
+        
+        return res;       
+    }
+};
+
+***************************************************************************************************************************
+
+242. Valid Anagram     //两个单词是否是异位单词
+
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        string s1=s;                            //1. 将两个字符串分别排序
+        sort(s1.begin(), s1.end());
+        string t1=t;
+        sort(t1.begin(), t1.end());
+        
+        if(s1==t1) return true;           //2. 判断排序后的字符串是否相等
+        else return false;        
+    }
+};
+
+**************************************************************************************************************************
+
+205. Isomorphic Strings     //两个单词是否同构（相似的结构）
+
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        unordered_map<char, int> m1, m2;       //两个哈希表
+		
+        for(int i=0; i<s.size(); ++i)           
+        {
+            if(m1[s[i]] != m2[t[i]]) return false;     //1. 如果哈希表里存在，比较对应的value
+			
+            m1[s[i]]=i+1;                              //2. 放入哈希表，key为原始字符，value为其对应的序位号加1
+            m2[t[i]]=i+1;
+        }
+        
+        return true;        
+    }
+};
+
+*************************************************************************************************************************
+
+290. Word Pattern      //可以看成同构（相似的结构）
+
+class Solution {
+public:
+    bool wordPattern(string pattern, string str) {
+        unordered_map<char, int> m1;                 //两个哈希表
+        unordered_map<string, int> m2;
+        
+        stringstream ss(str);
+        string tmp;
+        int i=0, n=pattern.size();
+		
+        while(getline(ss, tmp, ' '))
+        {
+            if(m1[pattern[i]] != m2[tmp]) return false;
+            
+            m1[pattern[i]]=i+1;
+            m2[tmp]=i+1;
+            ++i;            
+        }
+        
+        return i==n;       
+    }
+};

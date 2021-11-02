@@ -1,0 +1,186 @@
+55. 跳跃游戏                                 //判断能否跳跃到最后             
+
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        int n=nums.size();
+        vector<bool> dp(n, false);
+        dp[0]=true;
+        
+        for(int i=1; i<n; ++i)
+        {
+            for(int j=i-1; j>=0; --j)
+            {
+                if(dp[j] && j+nums[j]>=i)
+                {
+                    dp[i]=true;
+                    break;
+                }
+            }
+        }
+        
+        return dp.back();        
+    }
+};
+
+//存在型
+//dp[i]: 走到i位置是否可行
+
+******************************************************************************************************************
+
+45. 跳跃游戏 II                                //前提：肯定能走到最后的位置。问走到最后的位置最少需要几步
+
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int n=nums.size();
+        vector<int> dp(n, INT_MAX);
+        dp[0]=0;
+        
+        for(int i=1; i<n; ++i)
+        {
+            for(int j=i-1; j>=0; --j)
+            {
+                if(j+nums[j]>=i && dp[j]!=INT_MAX)
+                {
+                    dp[i]=min(dp[i], dp[j]+1);
+                }
+            }
+        }
+        
+        return dp.back();        
+    }
+};
+
+//极值型
+//dp[i]: 走到i位置所需要的最少步数
+//leet_AC: 90/92
+
+****************************************************************************************************************
+
+70. 爬楼梯
+
+class Solution {
+public:
+    int climbStairs(int n) {
+        vector<int> dp(n+1, 0);
+        dp[0]=1;
+        dp[1]=1;
+        
+        for(int i=2; i<=n; ++i)
+        {
+            dp[i] = dp[i-1]+dp[i-2];
+        }
+        
+        return dp.back();        
+    }
+};
+
+//计数型
+//dp[i]: 走到第i个台阶时所拥有的不同走法
+
+*************************************************************************************************************
+
+91. 解码方法
+
+int numDecodings(string s) 
+{
+	if (s.empty() || s[0] == '0') return 0;
+	int n = s.size();
+	s.insert(s.begin(), '#');                            //为了让s的索引与dp的索引对应
+	vector<int> dp(n + 1, 0);
+	dp[0] = 1;
+
+	for (int i = 1; i <= n; ++i)
+	{
+		dp[i] = (s[i-1]=='0') ? 0 : dp[i - 1];
+		if ((s[i - 1] == '1') || (s[i - 1] == '2' && s[i] <= '6'))
+		{
+			dp[i] += dp[i - 2];
+		}
+	}
+
+	return dp.back();
+};
+
+****************************************************************************************************************
+
+377. 组合总和 Ⅳ                                //原数组没有重复元素，每个元素可以被重复使用
+class Solution {                                    //与组合总和I的已知条件相同，但本题“顺序不同的序列被视作不同的组合”
+public:                                                   //应该“很少”会碰到这种情况                                                        
+    int combinationSum4(vector<int>& nums, int target)              
+	{
+        vector<unsigned int> dp(target+1);
+        dp[0]=1;
+        
+        for(int i=1; i<=target; ++i)
+        {
+            for(int j=0; j<nums.size(); ++j)
+            {
+                if(i>=nums[j])
+                {
+                    dp[i] += dp[i-nums[j]];
+                }
+            }
+        }
+        
+        return dp.back();        
+    }
+};
+
+*************************************************************************************************************
+
+322. 零钱兑换
+
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        vector<int> dp(amount+1, INT_MAX);
+        dp[0]=0;
+        
+        for(int i=1; i<=amount; ++i)
+        {
+            for(int j=0; j<coins.size(); ++j)
+            {
+                if(i>=coins[j] && dp[i-coins[j]]!=INT_MAX)
+                {
+                   dp[i]=min(dp[i], dp[i-coins[j]]+1); 
+                }
+            }
+        }
+        
+        return (dp[amount]==INT_MAX) ? -1 : dp[amount];        
+    }
+};
+
+//最大最小型
+//dp[i]： 拼凑成i元所需要的最少硬币个数
+
+*************************************************************************************************************
+
+300. 最长上升子序列                   //求最长上升子序列的长度
+
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        int n=nums.size(), res=0;
+        vector<int> dp(n, 1);
+        
+        for(int i=0; i<n; ++i)
+        {
+            for(int j=0; j<i; ++j)
+            {
+                if(nums[i]>nums[j])
+                {
+                    dp[i]=max(dp[i], dp[j]+1);
+                }
+            }
+            
+            res=max(res, dp[i]);
+        }
+        
+        return res;
+    }
+};
+
+

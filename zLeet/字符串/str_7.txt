@@ -1,0 +1,30 @@
+14. Longest Common Prefix      //最长公共前缀
+
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) 
+	{
+        string res;
+        if(strs.empty()) return res;
+        
+        for(int j=0; j<strs[0].size(); ++j)      
+        {
+            char c=strs[0][j];                   
+            
+            for(int i=1; i<strs.size(); ++i)     
+            {
+                if(c!=strs[i][j] || strs[i].size()<j) return res;
+            }
+            
+            res.push_back(c);      
+        }
+        
+        return res;        
+    }
+};
+
+
+//string res增加有三种方式:
+1.用“+”号，res = res + "a";
+2.用push_back()函数，res.push_back(a);
+3.用append()函数，res.append(a);

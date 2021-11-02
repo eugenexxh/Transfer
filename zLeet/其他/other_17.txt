@@ -1,0 +1,53 @@
+299. Bulls and Cows
+
+class Solution {
+public:
+    string getHint(string secret, string guess) {
+	    unordered_map<char, int> m;
+        int cnt1=0, cnt2=0;
+		                                          //找公牛的个数，就是找完全匹合的个数，就是找“一一对应的个数”
+        for(int i=0; i<secret.size(); ++i)       //secret[i]里只有两种，第一种是跟guess[i]完全匹合，第二种就要记录在哈希表里（次数）
+        {
+            if(secret[i]==guess[i]) ++cnt1;
+            else ++m[secret[i]];
+        }
+        
+        for(int i=0; i<guess.size(); ++i)     //找母牛的个数，就是找“不是一一对应，但是在哈希表里存在”的个数
+        {
+            if(guess[i]!=secret[i] && m[guess[i]])
+            {
+                ++cnt2;
+                --m[guess[i]];
+            }
+        }
+        
+        return to_string(cnt1)+"A"+to_string(cnt2)+"B";       
+    }
+};
+
+
+
+法二：用数组代替哈希表
+class Solution {
+public:
+    string getHint(string secret, string guess) {
+        int m[256]={0}, bulls=0, cows=0;
+		
+        for(int i=0; i<secret.size(); ++i)
+        {
+            if(secret[i]==guess[i]) ++bulls;
+            else ++m[secret[i]];
+        }
+        
+        for(int i=0; i<secret.size(); ++i)
+        {
+            if(secret[i]!=guess[i] && m[guess[i]])
+            {
+                ++cows;
+                --m[guess[i]];
+            }
+        }
+        
+        return to_string(bulls)+"A"+to_string(cows)+"B";       
+    }
+};

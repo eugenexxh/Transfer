@@ -1,0 +1,51 @@
+165. Compare Version Numbers
+
+class Solution {                                             //能不用sstream就不用
+public:                                                        //能不用stoi就不用
+    int compareVersion(string version1, string version2) {         //123.45 VS 123.46
+        int n1=version1.size(), n2=version2.size();
+        int i=0, j=0;
+        int num1=0, num2=0;
+		
+        while(i<n1 || j<n2)                                         //“."与"."之间的数字比较大小，同级比较.数字可能不是个位数
+        {
+            while(i<n1 && version1[i]!='.')
+            {
+                num1 = num1*10 + (version1[i]-'0');
+				++i;
+            }
+            while(j<n2 && version2[j]!='.')
+            {
+                num2 = num2*10 + (version2[j]-'0');
+				++j;
+            }
+            
+            if(num1>num2) return 1;
+            else if(num1<num2) return -1;
+            
+            num1=num2=0;
+            ++i; ++j;
+        }
+		
+        return 0;
+    }
+};
+
+*******************************************************************************************************************
+
+278. First Bad Version                           //二分搜索
+
+class Solution {
+public:
+    int firstBadVersion(int n) {
+        int left = 1, right = n;
+		
+        while (left <= right) {
+            int mid = left + (right - left) / 2;			
+            if (!isBadVersion(mid)) left = mid+1;
+            else right = mid - 1;
+        }
+		
+        return right + 1;
+    }
+};

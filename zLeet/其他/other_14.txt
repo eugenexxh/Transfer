@@ -1,0 +1,26 @@
+274. H-Index
+
+class Solution {
+public:
+    int hIndex(vector<int>& citations) {
+        sort(citations.begin(), citations.end(), greater<int>());   
+		
+        for(int i=0; i<citations.size(); ++i)       //如果序位 > 对应序位的值，便返回
+        {
+            if(i>=citations[i]) return i;
+        }
+        
+        return citations.size();        
+    }
+};
+
+//返回的是序位、索引
+
+*************************************************************************************************************
+
+275. H-Index II
+
+法一：如274
+
+法二：二分法
+
