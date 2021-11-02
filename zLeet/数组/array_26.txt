@@ -1,0 +1,81 @@
+189. Rotate Array                     //数组中的元素向右移动k个位置
+
+class Solution {
+public:
+    void rotate(vector<int>& nums, int k) {
+        int n=nums.size();
+		k %= n;
+        vector<int> tmp=nums;
+		
+        for(int i=0; i<n; ++i)
+        {
+		    int idx = (i+k)%n;
+            nums[idx] = tmp[i];
+        }        
+    }
+};
+
+/*
+左移k位：
+k %= n;
+int idex = (i-k+n)%n;
+nums[idex] = tmp[i];
+*/
+
+***************************************************************************************************************************
+
+61. Rotate List
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        if(!head) return NULL;     //不能少
+        
+        int n=0;                   //(1).k有可能大于链表个数，所以要先计算链表节点个数处理k
+        ListNode* cur=head;
+        while(cur)
+        {
+            ++n;
+            cur=cur->next;
+        }
+        k%=n;
+        
+        ListNode* fast=head, *slow=head;     //(2).快慢指针，快指针先走k步
+        for(int i=0; i<k; ++i)
+        {
+            fast=fast->next;
+        }
+        
+        while(fast->next)          //(3).然后两个指针一起走，直到fast走到旧链表最后一个节点，fast没有走到NULL节点
+        {                                 //此时slow走到新链表的最后一个节点
+            fast=fast->next;                   //最终的位置是fast与slow之间的距离是k
+            slow=slow->next;
+        }
+        
+		fast->next=head;
+        fast = slow->next;
+        slow->next=NULL;
+        return fast;           
+    }
+};
+
+/*
+while(cur)                //程序体执行的次数=链表节点数，cur走到NULL                           
+{
+    ++n;
+	cur=cur->next;
+}
+
+while(cur->next)         //程序体执行的次数=链表节点数-1，cur走到链表真正的最后一个节点
+{
+    ++n;
+	cur=cur->next;
+}*/

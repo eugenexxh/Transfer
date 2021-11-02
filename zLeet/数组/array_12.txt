@@ -1,0 +1,125 @@
+56. Merge Intervals
+
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        if(intervals.empty()) return {};        
+        sort(intervals.begin(), intervals.end());
+        vector<vector<int>> res{intervals[0]};
+
+       	for(int i=1; i<intervals.size(); ++i)
+     	{
+        	if(res.back()[1] < intervals[i][0])
+     		{
+     		    res.push_back(intervals[i]);
+			}
+			else
+			{
+			    res.back()[1] = max(res.back()[1], intervals[i][1]);
+			}	
+        }
+		
+		return res;
+    }
+};
+
+******************************************************************************************************************************
+
+57. Insert Interval
+
+
+class Solution {
+public:
+    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int> newInterval) {
+        int cnt=0;
+        vector<vector<int>> res;
+		
+        for(int i=0; i<intervals.size(); ++i)
+        {
+            if(intervals[i][1] < newInterval[0])
+            {
+                res.push_back(intervals[i]);
+                ++cnt;
+            }
+            else if(newInterval[1] < intervals[i][0])
+			{
+			    res.push_back(intervals[i]);
+			}
+            else
+            {
+                newInterval[0]=min(newInterval[0], intervals[i][0]);
+                newInterval[1]=max(newInterval[1], intervals[i][1]);
+            }                   
+        }
+        
+        res.insert(res.begin()+cnt, newInterval);
+        return res;                
+    }   
+};
+
+*****************************************************************************************************************************
+
+
+
+
+
+
+56.旧题目：
+/**
+ * Definition for an interval.
+ * struct Interval {
+ *     int start;
+ *     int end;
+ *     Interval() : start(0), end(0) {}
+ *     Interval(int s, int e) : start(s), end(e) {}
+ * };
+ */
+class Solution {
+public:
+    vector<Interval> merge(vector<Interval>& intervals) {
+        if(intervals.empty()) return {};        
+        sort(intervals.begin(), intervals.end(), [](Interval& m, Interval& n) {return m.start<n.start;});
+        vector<Interval> res{intervals[0]};
+		
+        for(int i=1; i<intervals.size(); ++i)
+        {
+            if(res.back().end < intervals[i].start)          //如果不重叠
+			{
+			    res.push_back(intervals[i]);
+			}
+            else
+			{
+			    res.back().end = max(res.back().end, intervals[i].end);
+			}
+        }
+        
+        return res;        
+    }
+};
+
+57.旧题目：
+class Solution {
+public:
+    vector<Interval> insert(vector<Interval>& intervals, Interval newInterval) {
+        int cnt=0;
+        vector<Interval> res;
+        for(int i=0; i<intervals.size(); ++i)
+        {
+            if(intervals[i].end < newInterval.start)
+            {
+                res.push_back(intervals[i]);
+                ++cnt;
+            }
+            else if(intervals[i].start > newInterval.end) res.push_back(intervals[i]);
+            else
+            {
+                newInterval.start=min(newInterval.start, intervals[i].start);
+                newInterval.end=max(newInterval.end, intervals[i].end);
+            }                   
+        }
+        
+        res.insert(res.begin()+cnt, newInterval);
+        return res;                
+    }   
+};
+

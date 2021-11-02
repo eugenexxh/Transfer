@@ -1,0 +1,17 @@
+280. Wiggle Sort                    //nums[0] <= nums[1] >= nums[2] <= nums[3] ...
+
+void wiggleSort(vector<int> &nums)
+{
+    sort(nums.begin(), nums.end());
+	if(nums.size()<=2) return;
+	
+	for(int i=1; i+1<nums.size(); i+=2)
+	{
+	    swap(nums[i], nums[i+1]);
+	}
+}
+
+/*
+1. 先将数组排序；
+2. 然后将(idex_1)与(idex_2)交换，将(idex_3)与(idex_4)交换；
+*/

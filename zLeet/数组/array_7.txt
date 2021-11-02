@@ -1,0 +1,72 @@
+41. First Missing Positive
+
+class Solution {
+public:
+    int firstMissingPositive(vector<int>& nums) {              //哈希set主要用来查找，不方便直接访问。 auto it=s.end(); --it; 表示指向最后一个元素
+        	
+		int mbig=0; 		
+        for(auto a : nums)    
+        {            
+		    mbig=max(mbig, a); 	
+        }
+		
+		set<int> s(nums.begin(), nums.end());        
+        for(int e=1; e<=mbig; ++e)                        //从最小的正整数1开始，元素范围是[1, mbig]，关注的对象已经变为hash_set了
+        {
+            if(!s.count(e)) return e;
+        }
+        
+        return mbig+1;                                //因为用了set，注意返回值的类型
+    }
+};
+
+******************************************************************************************************************************************
+
+268. Missing Number
+
+class Solution {                                                 
+public:
+    int missingNumber(vector<int>& nums) {
+        int n=nums.size();
+        set<int> s(nums.begin(), nums.end());
+		
+        for(int e=0; e<=n; ++e)    
+        {
+            if(!s.count(e)) return e; 
+        }
+        
+        return n;                            
+    }
+};
+
+
+法二：
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        int sum = 0, n = nums.size();
+        for (auto &a : nums) {
+            sum += a;
+        }
+        return 0.5 * n * (n + 1) - sum;
+    }
+};
+
+******************************************************************************************************************************************
+
+287. Find the Duplicate Number
+
+class Solution {
+public:
+    int findDuplicate(vector<int>& nums) {
+        unordered_map<int, int> m;
+		
+        for(auto a : nums)     
+        {
+            if(!m.count(a)) ++m[a];
+            else return a;
+        }
+          
+        return 0;                        //因为用了unordered_map，注意返回值类型        
+    }
+};

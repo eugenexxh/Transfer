@@ -1,0 +1,18 @@
+277. Find the Celebrity          //寻找名人
+
+int findCelebrity(int n)
+{
+    int res=0;
+	
+    for(int i=0; i<n; ++i)         
+	{
+	    if(kows(res, i) res=i;
+	}
+	
+	for(int i=0; i<n; ++i)      //验证这个候选人是否是名人（这个名人居然认识其他人 || 其他人不认识这个名人），不是则返回-1
+	{
+	    if(res!=i && (knows(res, i) || !knows(i, res)) return -1;     
+	}
+	
+	return res;
+}

@@ -1,0 +1,54 @@
+121. Best Time to Buy and Sell Stock              //只能买卖一次，从数组中找出两个元素（排序不变）的最大差值（一个差值）
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int buy=INT_MAX, res=0;
+		
+        for(auto a : prices)
+        {
+            buy=min(buy, a);                        //当前最小元素选取：(当前元素) VS (记录的最小元素)
+            res=max(res, a-buy);                        //最大差值选取：(当前元素-最小元素） VS (记录的最大差值）
+        }
+        
+        return res;       
+    }
+};
+
+*********************************************************************************************************************
+
+122. Best Time to Buy and Sell Stock II     //可以买好多次，累加差值
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int res=0, n=prices.size();         //若写成 i < prices.size()-1 则不通过
+        for(int i=1; i<n; ++i)                  //应写成 i < (int)prices.size()-1
+        {                                           //vec.size()是无符号整型，当vec.size()=0, vec.size()-1=4294967295, vec[i]会访问越界
+            if(prices[i] >= prices[i-1])
+            {
+                res += (prices[i]-prices[i-1]);
+            }
+        }
+        
+        return res;       
+    }
+};
+
+**********************************************************************************************************************
+
+53. Maximum Subarray                //最大子序（连在一起的子数组）和
+
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int curSum=0, res=INT_MIN;
+		
+        for(int i=0; i<nums.size(); ++i)
+        {
+            curSum=max(curSum+nums[i], nums[i]);     
+            res=max(res, curSum);                 
+        }
+        return res;
+    }
+};

@@ -1,0 +1,24 @@
+128. Longest Consecutive Sequence               //返回最长连续子序列的长度
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {             //用vector给set赋初值
+        unordered_set<int> s(nums.begin(), nums.end());     //此处的set的功能是查找、去重，只实现了unordered_map中的key
+        int res=0;
+		
+        for(auto a : nums)
+        {
+            if(!s.count(a)) continue;     //提高了运算效率
+            s.erase(a);
+			
+            int pre=a-1, next=a+1;
+            while(s.count(pre)) s.erase(pre--);
+            while(s.count(next)) s.erase(next++);
+            res=max(res, next-pre-1);
+        }
+        
+        return res;
+    }
+};
+
+//移除哈希集合中的数字是为了避免重复计算

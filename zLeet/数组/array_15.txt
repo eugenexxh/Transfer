@@ -1,0 +1,81 @@
+74. Search a 2D Matrix
+
+法一：二分               //12ms, 9.6MB
+class Solution {          
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        if(matrix.empty() || matrix[0].empty()) return false;
+        if(target<matrix[0][0] || target>matrix.back().back()) return false;
+        
+        int m=matrix.size(), n=matrix[0].size();
+        int left=0, right=m-1;
+        while(left<=right)
+        {
+            int mid=left+(right-left)/2;
+            if(matrix[mid][0]==target) return true;
+            else if(matrix[mid][0]<target) left=mid+1;
+            else right=mid-1;
+        }
+		
+        int row=right;
+        left=0, right=n-1;
+        while(left<=right)
+        {
+            int mid=left+(right-left)/2;
+            if(matrix[row][mid]==target) return true;
+            else if(matrix[row][mid]<target) left=mid+1;
+            else right=mid-1;
+        }
+        
+        return false;
+    }
+};
+
+法二：直接法
+class Solution {        // 12ms, 9.8MB
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        if(matrix.empty() || matrix[0].empty()) return false;
+        if(target<matrix[0][0] || target>matrix.back().back()) return false;       
+        int m=matrix.size(), n=matrix[0].size(); 
+		
+        for(int i=0; i<m; ++i)
+        {
+            for(int j=0; j<n; ++j)
+            {
+                if(matrix[i][j]==target) return true;
+            }
+        }
+        
+        return false;
+    }
+};
+
+**************************************************************************************************************************
+
+240. Search a 2D Matrix II
+
+法一：左下角
+class Solution {          //84ms, 12.9MB
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        if(matrix.empty() || matrix[0].empty()) return false;
+        if(target<matrix[0][0] || target>matrix.back().back()) return false;
+        
+        int m=matrix.size(), n=matrix[0].size();
+        int x=m-1, y=0;
+		
+        while(true)                                     //注意循环的方法，与螺旋矩阵一样
+        {
+            if(matrix[x][y]>target) --x;
+            else if(matrix[x][y]<target) ++y;
+            else return true;
+            
+            if(x<0 || y>n-1) break;
+        }
+        
+        return false;
+    }
+};
+
+法二：直接法        //1164ms, 13MB

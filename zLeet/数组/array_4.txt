@@ -1,0 +1,153 @@
+26. Remove Duplicates from Sorted Array                  //每个元素只能出现1次
+
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {      //此题传递的是引用，所以nums本身的值会变化
+	
+        set<int> s(nums.begin(), nums.end());    //set可以去重
+        nums.assign(s.begin(), s.end());        //vector中的函数assign
+        return nums.size();     
+    }
+};
+
+*********************************************************************************************************************************
+
+80. Remove Duplicates from Sorted Array II                  //每个元素最多两次
+
+class Solution {                                            //关于次数、重复之类，想到map和set
+public:
+    int removeDuplicates(vector<int>& nums) {
+	
+        unordered_map<int, int> m;     //1. 哈希表记录每个元素出现的次数
+        for(auto a: nums)
+        {
+            ++m[a];
+        }
+        
+        set<int> s(nums.begin(), nums.end());     //2. 让每个元素变为只出现1次
+        nums.assign(s.begin(), s.end());
+		
+		int n = nums.size();                 //nums.size()这个值在后面是会变化的，所以一开始就要先把它求出来
+        for(int i=0; i<n; ++i)
+        {
+            if(m[nums[i]]>=2) nums.push_back(nums[i]);
+        }
+        sort(nums.begin(), nums.end());
+        return nums.size();        
+    }
+};
+
+*********************************************************************************************************************************
+
+27. Remove Element
+
+class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        vector<int> res;    //新建一个数组
+        int n=nums.size();
+        for(int i=0; i<n; ++i)
+        {
+            if(nums[i]!=val) res.push_back(nums[i]);
+        }
+        nums.assign(res.begin(), res.end());
+        
+        return res.size();
+    }
+};
+
+********************************************************************************************************************************
+
+83. Remove Duplicates from Sorted List                     //重复的保留本尊，删除重复的副本
+
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        ListNode* cur=head;
+		
+        while(cur && cur->next)                
+        {
+            if(cur->val==cur->next->val) cur->next=cur->next->next;      //调整指向后，cur不能走，否则删不干净（eg: 1 1 1）
+            else cur=cur->next;     
+        }
+ 
+        return head;        
+    }
+};
+
+********************************************************************************************************************************
+
+82. Remove Duplicates from Sorted List II                     //只要是重复的（本尊+副本）全删了
+
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        ListNode* dummy=new ListNode(-1);
+        dummy->next=head;
+        ListNode* pre=dummy, *cur=head;
+        
+        while(cur && cur->next)
+        {
+            while(cur && cur->next && cur->val==cur->next->val) cur=cur->next;     //循环条件cur->next不能少
+			
+            if(pre->next != cur)
+            {
+                pre->next=cur->next;
+                cur=pre->next;
+            }
+            else
+            {
+                pre=cur;
+                cur=pre->next;
+            }
+        }
+        
+        return dummy->next;
+    }
+};
+
+**********************************
+
+203. Remove Linked List Elements
+
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        ListNode* dummy=new ListNode(-1);
+        dummy->next=head;
+        ListNode* pre=dummy, *cur=head;
+        
+        while(cur)
+        {
+            if(cur->val == val)
+            {
+                pre->next=cur->next;
+                cur=pre->next;
+            }
+            else
+            {
+                pre=cur;
+                cur=cur->next;
+            }
+        }
+        
+        return dummy->next;
+    }
+};
+
+***************************************
+
+237. Delete Node in a Linked List
+
+class Solution {
+public:
+    void deleteNode(ListNode* node) {                 //真正删除的是node之后的一个节点
+        ListNode* tmp=node->next;
+        node->val=tmp->val;
+		
+        node->next=tmp->next;        
+        tmp->next=NULL;
+        delete tmp;  
+    }
+};
+

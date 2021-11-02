@@ -1,0 +1,24 @@
+75. Sort Colors
+
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        vector<int> res;
+        map<int, int> m;
+		
+        for(auto a : nums) ++m[a];
+        
+        for(int e=0; e<3; ++e)
+        {
+            for(int j=0; j<m[e]; ++j)
+            {
+                res.push_back(e);
+            }
+        }
+        
+        nums.assign(res.begin(), res.end());      //将一个vector赋值给另一个vector用assign  
+    }
+};
+
+**************************************
+

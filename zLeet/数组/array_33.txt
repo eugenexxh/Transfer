@@ -1,0 +1,45 @@
+289. Game of Life
+
+class Solution {
+public:
+    void gameOfLife(vector<vector<int>>& board) {
+        int m=board.size(), n=m?board[0].size():0;
+        int dx[8] = {-1, -1, -1, 0, 1, 1, 1, 0};
+        int dy[8] = {-1, 0, 1, 1, 1, 0, -1, -1};
+    
+        for(int i=0; i<m; ++i)
+        {
+            for(int j=0; j<n; ++j)
+            {
+                int cnt=0;                                               //1. 统计每一个位置的周围8个位置“目前”的活细胞个数
+                for(int k=0; k<8; ++k)                                            //不是“最终”的活细胞个数           
+                {
+                    int x=i+dx[k], y=j+dy[k];     
+                    if(x>=0 && x<m && y>=0 && y<n && (board[x][y]==1 || board[x][y]==2)) ++cnt;     
+                }
+                
+                if(board[i][j] && (cnt<2 || cnt>3)) board[i][j]=2;      //2. 有了cnt后，才能判断当前位置是2,3的哪种状态
+                else if(!board[i][j] && cnt==3) board[i][j]=3;
+            }
+        }
+        
+        for(int i=0; i<m; ++i)    
+        {
+            for(int j=0; j<n; ++j)
+            {
+                board[i][j] %= 2;     //每一个位置对2取余
+            }
+        }
+        
+    }
+};
+
+
+/*
+0. 死——死；
+1. 活——活；
+2. 活——死；
+3. 死——活；
+*/
+
+

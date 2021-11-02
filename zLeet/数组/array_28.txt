@@ -1,0 +1,67 @@
+217. Contains Duplicate     //是否存在重复元素
+
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        unordered_map<int, int> m;
+		
+        for(int i=0; i<nums.size(); ++i)                 //只需要循环一次即可
+        {
+            if(m.count(nums[i])) return true;                //如果哈希表里存在，返回true
+            m[nums[i]]=i;                                   
+        }
+        
+        return false;        
+    }
+};
+
+**********************************************************************************************************************************
+
+219. Contains Duplicate II      //是否存在重复元素，并且两元素“序位差”的绝对值<=K
+
+class Solution {
+public:
+    bool containsNearbyDuplicate(vector<int>& nums, int k) {
+        unordered_map<int, int> m;
+		
+        for(int i=0; i<nums.size(); ++i)
+        {
+            if(m.count(nums[i]) && i-m[nums[i]]<=k) return true;
+            m[nums[i]]=i;
+        }
+        
+        return false;        
+    }
+};
+
+**********************************************************************************************************************************
+
+220. Contains Duplicate III     //非重复元素, 序位条件|i-j|<=k，数值条件|nuns[i]-nums[j]|<=t
+
+class Solution {
+public:
+    bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
+        map<long long, int> m;
+        int j=0;
+		
+        for(int i=0; i<nums.size(); ++i)          
+        {
+            if(i-j>k) m.erase(nums[j++]);                 //(1).先看序位条件。++不能少
+            
+            auto a = m.lower_bound((long long)nums[i]-t);                 //(2).看数值条件。从map找一个 >= nums[i]-t 的范围
+            if(a!=m.end() && abs(a->first-nums[i])<=t) return true;     //能用lower_bound的数据结构是map, set, 或者vector这样的有序容器
+                                                                        //|x - nums[i]| <= t，拆开就是 nums[i] - t <= x <= nums[i] + t  
+            m[nums[i]]=i;
+        }
+        
+        return false;        
+    }
+};
+
+
+/*
+哈希表的查找推荐用count(),count返回的是0或1，count写起来简单方便；
+而find返回的是位置；
+*/
+
+之所以用map而不是unorderd_map，是因为map的key是按顺序排列的

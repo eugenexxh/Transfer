@@ -1,0 +1,58 @@
+243. Shortest Word Distance I     //求word1与word2索引号差的最小绝对值。数组words可能会有元素重复，但word1与word2不相同
+
+class Solution {
+public:
+    int shortestDistance(vector<string>& words, string word1, string word2)
+    {
+        int p1=-1, p2=-1, res=INT_MAX;
+
+        for(int i=0; i<words.size(); ++i)
+        {
+            if(words[i]==word1) p1=i;
+            else if(words[i]==word2) p2=i;
+
+            if(p1!=-1 && p2!=-1) res=min(res, abs(p1-p2));
+        }
+
+        return res;
+    }
+};
+
+***********************************************************************************************************************************
+
+245. Shortest Word Distance III      //数组words可能会有元素重复，word1与word2可能会相同
+
+class Solution {
+public:
+    int shortestWordDistance(vector<string>& words, string word1, string word2) {
+        int res = INT_MAX;
+		
+        if(word1==word2)
+        {
+            vector<int> nums;
+            for(int i=0; i<words.size(); ++i)
+            {
+                if(words[i]==word1) nums.push_back(i);
+            }
+            
+            for(int i=1; i<nums.size(); ++i)
+            {
+                res = min(res, abs(nums[i]-nums[i-1]));
+            }            
+        }
+        else
+        {
+            int p1=-1, p2=-1;
+
+            for(int i=0; i<words.size(); ++i)
+            {
+                if(words[i]==word1) p1=i;
+                else if(words[i]==word2) p2=i;
+
+                if(p1!=-1 && p2!=-1) res=min(res, abs(p1-p2));
+            }
+        }
+        
+        return res;        
+    }
+};

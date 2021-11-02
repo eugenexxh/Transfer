@@ -1,0 +1,119 @@
+11. Container With Most Water                
+
+class Solution {
+public:
+    int maxArea(vector<int>& nums) {
+	
+        int left=0, right=nums.size()-1;
+        int res=0;
+		
+        while(left<right)
+        {
+            int curArea=(right-left) * min(nums[left], nums[right]);
+            res=max(res, curArea);
+            
+            if(nums[left]<nums[right]) ++left;      
+            else --right;                           
+        }
+        
+        return res;        
+    }
+};
+
+*******************************
+// 华为现场面试第二轮，手撕代码
+42. Trapping Rain Water (Hard)                         //leet_11忽略序位号的宽度，42考虑它的宽度（累加）
+
+int trap(vector<int>& height) {
+
+	stack<int> st;
+	int res = 0, i = 0, n = height.size();
+	
+	while(i<n)
+	{
+		if (st.empty() || height[i] <= height[st.top()]) st.push(i++);    //栈中存入的是“低谷序位号”
+		else
+		{
+			int tmp = st.top(); st.pop();           //出栈后考虑栈是否为空
+			if (st.empty()) continue;
+			
+			int curArea = (i - st.top() - 1) * (min(height[i], height[st.top()]) - height[tmp]);
+			res += curArea;
+		}
+	}
+	
+	return res;
+}
+
+*************************************
+
+84. Largest Rectangle in Histogram (Hard)
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+	
+        stack<int> st;
+        heights.push_back(0);                    //*
+        int i=0, n=heights.size(), res=0;
+		
+        while(i<n)
+        {
+            if(st.empty() || heights[i]>=heights[st.top()]) st.push(i++);    //栈中存入的是“高峰序位号”
+            else
+            {
+                int tmp = st.top(); st.pop();                                     //出栈后，要考虑栈是否为空
+                int cur = (st.empty() ? i : (i-st.top()-1)) * heights[tmp];
+                res=max(res, cur);
+            }
+        }
+        
+        return res;
+    }
+};
+
+****************************************
+
+85. Maximal Rectangle (Hard)
+
+class Solution {
+public:
+    int maximalRectangle(vector<vector<char> > &matrix) {
+	
+        if(matrix.empty() || matrix[0].empty()) return 0;     //不能少
+		
+        int m=matrix.size(), n=matrix[0].size();
+        vector<int> height(n);
+        int res=0;
+		
+        for(int i=0; i<m; ++i)
+        {
+            for(int j=0; j<n; ++j)
+            {
+                height[j] = (matrix[i][j]=='0') ? 0 : (height[j]+1);
+            }
+            res=max(res, helper(height));
+        }
+        
+        return res;
+    }
+    
+    int helper(vector<int>& height)
+    {
+        stack<int> st;
+        height.push_back(0);
+        int i=0, n=height.size(), res=0;
+		
+        while(i<n)
+        {
+            if(st.empty() || height[i]>=height[st.top()]) st.push(i++);     //st.empty()不能少
+            else
+            {
+                int tmp=st.top(); st.pop();
+                int cur=(st.empty() ? i: (i-st.top()-1))*height[tmp];
+                res=max(res, cur);
+            }
+        }
+        return res;
+    }
+};

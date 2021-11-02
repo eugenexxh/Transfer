@@ -1,0 +1,49 @@
+73. Set Matrix Zeroes
+
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        int m=matrix.size(), n=matrix[0].size();
+        bool colZero=false, rowZero=false;
+        
+        for(int i=0; i<m; ++i)                          //查看第0列是否有元素为0
+        {
+            if(matrix[i][0]==0) colZero=true;
+        }
+        
+        for(int j=0; j<n; ++j)                         //查看第0行是否有元素为0
+        {
+            if(matrix[0][j]==0) rowZero=true;
+        }
+        
+        for(int i=1; i<m; ++i)                       //遍历矩阵（除去第0行第0列），查看矩阵中是否有元素为0
+        {                                            //如果有0的话，则将对应的第0行，第0列元素置为0
+            for(int j=1; j<n; ++j)
+            {
+                if(matrix[i][j]==0)
+                {
+                    matrix[0][j]=0;
+                    matrix[i][0]=0;
+                }
+            }
+        }
+        
+        for(int i=1; i<m; ++i)                     //遍历矩阵（除去第0行第0列），查看对应的0行0列是否有元素为0
+        {                                          //如果有0的话，则将遍历到的这个位置的元素置为0
+            for(int j=1; j<n; ++j)
+            {
+                if(matrix[0][j]==0 || matrix[i][0]==0) matrix[i][j]=0;
+            }
+        }
+        
+        if(rowZero)                                 //如果原先第0行元素有0，将第0行全置为0
+        {
+            for(int j=0; j<n; ++j) matrix[0][j]=0;
+        }
+        
+        if(colZero)                                      //如果原先第0列元素有0，将第0列全置为0
+        {
+            for(int i=0; i<m; ++i) matrix[i][0]=0;
+        }
+    }
+};

@@ -1,0 +1,28 @@
+238. Product of Array Except Self            //除了本身以外的数组乘积
+
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int n=nums.size();
+        vector<int> f(n, 1);
+        vector<int> b(n, 1);
+        vector<int> res(n);
+        
+        for(int i=1; i<n; ++i)
+        {
+            f[i]=f[i-1]*nums[i-1];
+        }
+		
+        for(int i=n-2; i>=0; --i)
+        {
+            b[i]=b[i+1]*nums[i+1];
+        }
+		
+        for(int k=0; k<n; ++k)
+        {
+            res[k] = f[k] * b[k];
+        }
+        
+        return res;        
+    }
+};

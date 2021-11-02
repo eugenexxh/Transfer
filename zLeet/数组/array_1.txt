@@ -1,0 +1,295 @@
+1. Two Sum
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+	
+        unordered_map<int, int> m;
+        for(int i=0; i<nums.size(); ++i)      //map的key记录具体的数值，value记录下对应的序位号
+        {
+            m[nums[i]]=i;
+        }
+        
+        vector<int> res;
+        for(int i=0; i<nums.size(); ++i)
+        {
+            int targetz=target-nums[i];
+            if(m.count(targetz) && m[targetz]!=i)     //1.直接从map中找某个元素时，可以用find或conut，不需要再次遍历map
+            {                                         //2.m.count在key中搜索，此处用count,只返回0或1（真假）；不要用find，返回位置，类型不符
+                res.push_back(i);
+                res.push_back(m[targetz]);            //3.不要少 m[targrt]!=i     和      break;
+                break;
+            }
+        }
+        
+        return res;
+    }
+};
+
+**********************************************************************************************************************
+
+167. Two Sum II - Input array is sorted
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+	
+        vector<int> res;
+        int left=0, right=nums.size()-1;                      //nums.size()-1这样写其实有风险
+		
+        while(left<right)
+        {
+            int sum=nums[left]+nums[right];
+			
+            if(sum==target)
+            {
+                res.push_back(left+1);
+                res.push_back(right+1);
+                break;
+            }
+            else if(sum < target) ++left;
+            else --right;
+        }
+        return res;        
+    }
+};
+
+***********************************************************************************************************************
+
+15. 3Sum
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+	
+        sort(nums.begin(), nums.end());
+        if(nums.empty() || nums.front()>0 || nums.back()<0) return {};
+        
+        int n=nums.size();
+        set<vector<int>> s;                                              //set避免重复，set使用insert
+		
+        for(int i=0; i<n-2; ++i)                                          //vector使用push_back；vector只有在初始化才能用vector res{1,2,3,4};
+        {
+            if(nums[i]>0) break;
+            int left=i+1, right=n-1;
+			
+            while(left<right)
+            {
+                int sum=nums[i]+nums[left]+nums[right];
+				
+                if(sum==0)
+                {
+                    vector<int> out{nums[i], nums[left], nums[right]};
+                    s.insert(out);
+					
+					while(left<right && nums[left]==nums[left+1]) ++left;               //跳过重复，不能少
+					while(left<right && nums[right]==nums[right-1]) --right;    
+					
+				    ++left; --right;	     //重要
+                }
+                else if(sum<0) ++left;
+                else --right;                
+            }            
+        }
+        
+        return vector<vector<int>> (s.begin(), s.end());
+    }
+};
+
+/*
+unordered_set只有key, unordered_map的key有着对应的value;
+set是有序的，map也是有序的；
+set与unordered_set都是可以去重的，一个有序，一个无序；
+map与unordered_map可以对key去重，一个有序，一个无序；
+*/
+
+*********************************************************************************************************
+
+18. 4Sum
+
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+	
+        sort(nums.begin(), nums.end());
+        int n=nums.size();
+        set<vector<int>> s;
+        
+        for(int i=0; i<n-3; ++i)
+        {
+            for(int j=i+1; j<n-2; ++j)
+            {
+                int left=j+1, right=n-1;
+				
+                while(left<right)
+                {
+                    int sum=nums[i]+nums[j]+nums[left]+nums[right];
+					
+                    if(sum==target)
+                    {
+                        vector<int> out{nums[i], nums[j], nums[left], nums[right]};
+                        s.insert(out);
+						
+						while(left<right && nums[left]==nums[left+1]) ++left;               //跳过重复，不能少
+					    while(left<right && nums[right]==nums[right-1]) --right; 
+                        ++left; --right;                        
+                    }
+                    else if(sum<target) ++left;
+                    else --right;
+                }
+            }
+        }        
+        return vector<vector<int>> (s.begin(), s.end());       //记住转换格式
+    }
+};
+
+**********************************************************************************************************
+
+16. 3Sum Closest
+
+class Solution {
+public:
+    int threeSumClosest(vector<int>& nums, int target) {
+	
+        sort(nums.begin(), nums.end());
+        int n=nums.size();
+        int sum=nums[0]+nums[1]+nums[2];
+        int diff=abs(target-sum);
+        
+        for(int i=0; i<n-2; ++i)
+        {
+            int left=i+1, right=n-1;
+			
+            while(left<right)
+            {
+                int newSum=nums[i]+nums[left]+nums[right];
+                int newDiff=abs(target-newSum);
+                if(newDiff < diff)
+                {
+                    diff=newDiff;
+                    sum=newSum;
+                }
+                
+                if(newSum < target) ++left;
+                else  --right;                      //不要写成else if(newSum > targrt)
+            }
+        }
+        
+        return sum; 
+    }
+};
+
+**********************************
+
+
+
+259. 三数之和较小值
+
+//先确定最大的那个值，然后用双指法
+
+class Solution {
+public:
+    int threeSumSmaller(vector<int>& nums, int target) {
+        int n = nums.size(), res=0;
+        sort(nums.begin(), nums.end());
+		
+        for (int i = n-1; i>=2; --i) 
+		{
+            int left = 0, right = i - 1;
+            while (left < right) 
+			{
+                if (nums[i] + nums[left] + nums[right] < target) 
+				{
+                    res += (right - left);
+                    ++left;
+                } 
+				else --right;
+            }
+        }
+		
+        return res;
+    }
+};
+
+***********************************************************************************************************************************
+
+611. 有效三角形的个数
+
+//先确定最大的那个值，然后用双指针法
+
+class Solution {
+public:
+    int triangleNumber(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int n=nums.size(), res=0;
+        
+        for(int i=n-1; i>=2; --i)
+        {
+            int left=0, right=i-1;
+            while(left<right)
+            {
+                if(nums[left]+nums[right] > nums[i])
+                {
+                    res += (right-left);
+                    --right;
+                }
+                else ++left;
+            }
+        }
+        
+        return res;        
+    }
+};
+
+
+
+
+***********************************************************************************************************************************
+
+976. 三角形的最大周长
+
+class Solution {
+public:
+    int largestPerimeter(vector<int>& A) {
+        sort(A.begin(), A.end());
+        int n = A.size();
+		
+        for (int i = n - 1; i >= 2; --i)
+        {
+            if (A[i - 2] + A[i - 1] > A[i])
+            {
+                return A[i - 2] + A[i - 1] + A[i];
+            }
+        }
+        
+        return 0;
+    }
+};
+
+***********************************************************************************************************************************
+
+812. 最大三角形面积
+
+class Solution {
+public:
+    double largestTriangleArea(vector<vector<int>>& points) {
+        double res = 0;
+		
+        for (int i = 0; i < points.size(); ++i) 
+		{
+            for (int j = i + 1; j < points.size(); ++j) 
+			{
+                for (int k = j + 1; k < points.size(); ++k) 
+				{
+                    int x1 = points[i][0], y1 = points[i][1];
+                    int x2 = points[j][0], y2 = points[j][1];
+                    int x3 = points[k][0], y3 = points[k][1];
+                    double area = abs(0.5 * (x2 * y3 + x1 * y2 + x3 * y1 - x3 * y2 - x2 * y1 - x1 * y3));
+                    res = max(res, area);
+                }
+            }
+        }
+		
+        return res;
+    }
+};

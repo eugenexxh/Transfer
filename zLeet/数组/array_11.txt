@@ -1,0 +1,59 @@
+54. Spiral Matrix
+
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        if(matrix.empty() || matrix[0].empty()) return {};
+        int m=matrix.size(), n=matrix[0].size();
+        int left=0, right=n-1, up=0, down=m-1;
+        vector<int> res;
+		
+        while(true)                    
+        {
+            for(int j=left; j<=right; ++j) res.push_back(matrix[up][j]);      //j从left开始，不是从0开始
+            if(++up > down) break;
+            
+            for(int i=up; i<=down; ++i) res.push_back(matrix[i][right]);
+            if(--right < left) break;
+            
+            for(int j=right; j>=left; --j) res.push_back(matrix[down][j]);
+            if(--down < up) break;
+            
+            for(int i=down; i>=up; --i) res.push_back(matrix[i][left]);
+            if(++left > right) break;
+        }
+        
+        return res;       
+    }
+};
+
+**************************************************************************************************************
+
+59. Spiral Matrix II
+
+class Solution {
+public:
+    vector<vector<int>> generateMatrix(int n) {
+        int cnt=1;
+        int left=0, right=n-1, up=0, down=n-1;
+        vector<vector<int>> matrix(n, vector<int>(n));
+		
+        while(true)                    
+        {
+            for(int j=left; j<=right; ++j) {matrix[up][j]=cnt++;}
+            if(++up > down) break;
+            
+            for(int i=up; i<=down; ++i) {matrix[i][right]=cnt++;}
+            if(--right < left) break;
+            
+            for(int j=right; j>=left; --j)  {matrix[down][j]=cnt++;}
+            if(--down < up) break;
+            
+            for(int i=down; i>=up; --i)  {matrix[i][left]=cnt++;}
+            if(++left > right) break;
+        }
+        
+        return matrix;                  
+    }
+};
+

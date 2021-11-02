@@ -1,0 +1,50 @@
+163. Missing Ranges                                                                         //将缺失的区间显示出来
+
+vector<string> findMissingRanges(vector<int>& nums, int lower, int upper)
+{
+    int left = lower;                     //left表示的元素值                                                                     
+    int n=nums.size();
+	vector<string> res;
+	
+	for(int i=0; i<n; ++i)                                                                  
+	{
+	    int right = (i<n && nums[i]<=upper) ? nums[i] : upper+1;
+		
+		if(left == right) ++left;       //说明不缺失（连续）
+		else if(left < right)
+		{
+		    string tmp = (right-left==1) ? to_string(left) : to_string(left) + "->" + to_string(right-1);
+			res.push_back(tmp);
+			   
+			left = right+1;	                                                                	
+		}
+	}
+	
+	return res;
+}
+
+*****************************************************************************************************************************
+
+228. Summary Ranges     //将连续的元素汇总成区间
+
+class Solution {
+public:
+    vector<string> summaryRanges(vector<int>& nums) {
+        int i=0, n=nums.size();                      
+        vector<string> res;
+		
+        while(i < n)
+        {
+            int len = 1;
+            while(i+len<n && (long long)nums[i+len]-nums[i]==len) ++len;         //一直到数字不连续为止
+            
+            string tmp = (len==1) ? to_string(nums[i]) : to_string(nums[i])+ "->" + to_string(nums[i+len-1]);
+            res.push_back(tmp);
+            
+            i += len;     //不可少，否则出不了循环
+        }
+        
+        return res;       
+    }
+};
+	
